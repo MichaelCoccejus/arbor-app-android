@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Arbor</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="contentDescr">Add tree</string>
+    <string name="setting">Setting</string>
+    <string name="logout">Logout</string>
 </resources>
