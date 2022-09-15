@@ -6,4 +6,16 @@
     <string name="contentDescr">Add tree</string>
     <string name="setting">Setting</string>
     <string name="logout">Logout</string>
+    <string name="orga">Verwaltung Bäume"</string>
+    <string name="mapButtonText">Kartenansicht</string>
+    <string name="save">Speichern</string>
+    <string name="discard">Verwerfen</string>
+    <string name="treeNameField">Name</string>
+    <string name="treeNamehint">Baumname eingeben</string>
+    <string name="latNameField">lat. Name</string>
+    <string name="plantTimeText">Einpflanzung</string>
+    <string name="sizeText">Größe</string>
+    <string name="latitudeText">Latitude</string>
+    <string name="altitudeText">Altitude</string>
+    <string name="longitudeText">Longitude</string>
 </resources>

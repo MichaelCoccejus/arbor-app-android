@@ -1,19 +1,11 @@
 package eu.berrytopia.arbor
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.content.Intent
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.os.Environment
 import android.os.Looper
-import android.os.PersistableBundle
-import android.provider.Settings
 import android.util.Log
 import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.*
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -23,10 +15,9 @@ import org.osmdroid.views.MapView
 
 class MapActivity : AppCompatActivity() {
 
-    override fun onCreate(savedInstanceState: Bundle?/*, persistentState: PersistableBundle?*/) {
-        super.onCreate(savedInstanceState/*, persistentState*/)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity)
-        //setSupportActionBar(findViewById(R.id.my_toolbar))
 
         initMap()
         initGps()
