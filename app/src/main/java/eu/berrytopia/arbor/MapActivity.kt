@@ -1,6 +1,7 @@
 package eu.berrytopia.arbor
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -9,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -21,15 +23,12 @@ class MapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity)
 
-        val spinner: Spinner = findViewById(R.id.latinNames)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.testArray,
-            android.R.layout.simple_spinner_item // Es gibt bereits eine vorgegebene Liste wie die Items angezeigt werden. simple_spinner_item ist eine Darstellung.
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-            spinner.adapter = adapter
+        val floatBut: FloatingActionButton = findViewById(R.id.floatingActionButton)
+        floatBut.setOnClickListener {
+            val intent = Intent(this, AddTreeActivity::class.java)
+            startActivity(intent)
         }
+
         initMap()
         initGps()
     }
