@@ -15,7 +15,14 @@
     <string name="latNameField">lat. Name</string>
     <string name="plantTimeText">Einpflanzung</string>
     <string name="sizeText">Größe</string>
+    <string name="sizeInput">Größe (in m) eingeben</string>
     <string name="latitudeText">Latitude</string>
     <string name="altitudeText">Altitude</string>
     <string name="longitudeText">Longitude</string>
+    
+    <string-array name="testArray">
+        <item>Latinum ist da.</item>
+        <item>Metro Exodus</item>
+        <item>Witcher 3</item>
+    </string-array>
 </resources>
