@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+        <item android:id="@+id/listTrees"
+            android:actionLayout="@layout/map_activity"
+            android:title="@string/orga"/>
+        <item android:id="@+id/mapViewButton"
+            android:actionLayout="@layout/map_activity"
+            android:title="@string/mapButtonText"/>
+</menu>
