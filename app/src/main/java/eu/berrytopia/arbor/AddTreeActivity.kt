@@ -1,14 +1,13 @@
 package eu.berrytopia.arbor
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 
 class AddTreeActivity: AppCompatActivity() {
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)
 
         val spinner: Spinner = findViewById(R.id.latinNames)
