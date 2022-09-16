@@ -19,6 +19,7 @@
     <string name="latitudeText">Latitude</string>
     <string name="altitudeText">Altitude</string>
     <string name="longitudeText">Longitude</string>
+    <string name="namePlaceholder">Platzhalter</string>
     
     <string-array name="testArray">
         <item>Latinum ist da.</item>
