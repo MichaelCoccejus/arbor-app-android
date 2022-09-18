@@ -6,8 +6,6 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.Menu
-import android.widget.ArrayAdapter
-import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton

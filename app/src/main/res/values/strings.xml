@@ -20,7 +20,11 @@
     <string name="altitudeText">Altitude</string>
     <string name="longitudeText">Longitude</string>
     <string name="namePlaceholder">Platzhalter</string>
-    
+    <string name="descText">Beschreibung</string>
+    <string name="takePhoto">Foto schießen</string>
+    <string name="addfoto">Foto hinzufügen</string>
+    <string name="addDocument">Dokument hinzufügen</string>
+
     <string-array name="testArray">
         <item>Latinum ist da.</item>
         <item>Metro Exodus</item>
