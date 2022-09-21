@@ -25,6 +25,7 @@
     <string name="addfoto">Foto hinzufügen</string>
     <string name="addDocument">Dokument hinzufügen</string>
     <string name="todo">TODO</string>
+    <string name="placeholder">placeholder</string>
 
     <string-array name="testArray">
         <item>Latinum ist da.</item>
