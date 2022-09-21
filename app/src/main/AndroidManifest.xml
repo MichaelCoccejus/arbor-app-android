@@ -32,5 +32,9 @@
         </activity>
         <activity android:name=".MapActivity"></activity>
         <activity android:name=".AddTreeActivity"></activity>
+        <activity android:name=".MaintenanceActivity"></activity>
+        <activity android:name=".AddEventActivity"></activity>
+        <activity android:name=".TreeInformationActivity"></activity>
+        <activity android:name=".AddTreeActivity"></activity>
     </application>
 </manifest>
