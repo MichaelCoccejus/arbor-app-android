@@ -18,6 +18,14 @@ class AddTreeActivity: AppCompatActivity() {
     var cameraRequest = 1888
     lateinit var imageView: ImageView
 
+    /**
+     * Die Ansicht (addtree_activity) dient zum Erstellen neuer Bäume.
+     * Die lateinischen Namen werden aus der Datenbank bezogen und als Array im res>values>strings.xml abgelegt.
+     * Bekannte Informationen sollten automatisch hinzugefügt werden.
+     *
+     * TODO: Eventuelle Manipulation des Arrays für lateinische Namen.
+     * TODO: Plantage muss zur Ansicht zu Verfügung gestellt werden.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)

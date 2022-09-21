@@ -16,6 +16,12 @@ class AddEventActivity : AppCompatActivity() {
     var cameraRequest = 1888
     lateinit var imageView: ImageView
 
+    /**
+     Activity ist zuständig für die Ansicht addevent_activity und benötigt keine weiteren Klassen oder Elemente aus dem layout-Ordner.
+     Die Activity fügt neue Elemente mit der Referenz zu dem aktuell zu bearbeitenden GeoObject hinzu (siehe Diagramm).
+
+     TODO: Die Funktionalitäten der Buttons.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addevent_activity)

@@ -4,9 +4,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 
-
-class EventAdapter(private val mEvent: List<Event>) :
-    RecyclerView.Adapter<EventAdapter.ViewHolder>() {
+class MaintenanceAdapter(private val mGeoObject: List<GeoObject>) :
+    RecyclerView.Adapter<MaintenanceAdapter.ViewHolder>() {
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     }
@@ -22,4 +21,5 @@ class EventAdapter(private val mEvent: List<Event>) :
     override fun getItemCount(): Int {
         TODO("Not yet implemented")
     }
+
 }
