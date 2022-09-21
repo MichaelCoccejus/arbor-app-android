@@ -30,11 +30,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapActivity"></activity>
-        <activity android:name=".AddTreeActivity"></activity>
-        <activity android:name=".MaintenanceActivity"></activity>
-        <activity android:name=".AddEventActivity"></activity>
-        <activity android:name=".TreeInformationActivity"></activity>
-        <activity android:name=".AddTreeActivity"></activity>
+        <activity android:name=".MapActivity" />
+        <activity android:name=".AddTreeActivity" />
+        <activity android:name=".MaintenanceActivity" />
+        <activity android:name=".AddEventActivity" />
+        <activity android:name=".TreeInformationActivity" />
     </application>
 </manifest>

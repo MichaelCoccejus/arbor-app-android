@@ -24,15 +24,13 @@ class MaintenanceActivity : AppCompatActivity() {
         var mGeoObject: List<GeoObject> = listOf()
         var treePicsList: List<Photos> = listOf()
 
-        /*val gridView : RecyclerView = findViewById(R.id.treeGridView)
+        val gridView : RecyclerView = findViewById(R.id.treeGridView)
         gridView.layoutManager = GridLayoutManager(this, 5)
         gridView.adapter = MaintenanceAdapter(this, mGeoObject, treePicsList)
 
         if (mGeoObject.isEmpty()) {
-            val emptyView: View = findViewById(R.id.emptyView)
             gridView.visibility = View.GONE
-            emptyView.visibility = View.VISIBLE
-        }*/
+        }
 
         val verwaltunBut: Button = findViewById(R.id.verwaltungBtn)
         verwaltunBut.setOnClickListener{
