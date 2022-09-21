@@ -22,6 +22,7 @@ class MaintenanceActivity : AppCompatActivity() {
 
         val gridView : RecyclerView = findViewById(R.id.treeGridView)
         gridView.layoutManager = GridLayoutManager(this, 5)
+        gridView.adapter = MaintenanceAdapter(this, listOf(), listOf())
 
         val verwaltunBut: Button = findViewById(R.id.verwaltungBtn)
         verwaltunBut.setOnClickListener{
