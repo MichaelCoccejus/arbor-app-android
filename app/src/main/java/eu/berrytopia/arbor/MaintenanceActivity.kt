@@ -1,6 +1,8 @@
 package eu.berrytopia.arbor
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,5 +22,17 @@ class MaintenanceActivity : AppCompatActivity() {
 
         val gridView : RecyclerView = findViewById(R.id.treeGridView)
         gridView.layoutManager = GridLayoutManager(this, 5)
+
+        val verwaltunBut: Button = findViewById(R.id.verwaltungBtn)
+        verwaltunBut.setOnClickListener{
+            val intent = Intent(this, MaintenanceActivity::class.java)
+            startActivity(intent)
+        }
+
+        val mapBut: Button = findViewById(R.id.mapBtn)
+        mapBut.setOnClickListener{
+            val intent = Intent(this, MapActivity::class.java)
+            startActivity(intent)
+        }
     }
 }

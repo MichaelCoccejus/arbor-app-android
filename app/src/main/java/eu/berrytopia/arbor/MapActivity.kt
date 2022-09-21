@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.Menu
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.location.*
+import com.google.android.material.bottomnavigation.BottomNavigationItemView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -16,7 +18,6 @@ import org.osmdroid.views.MapView
 
 
 class MapActivity : AppCompatActivity() {
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity)
@@ -24,6 +25,18 @@ class MapActivity : AppCompatActivity() {
         val floatBut: FloatingActionButton = findViewById(R.id.floatingActionButton)
         floatBut.setOnClickListener {
             val intent = Intent(this, AddTreeActivity::class.java)
+            startActivity(intent)
+        }
+
+        val verwaltunBut: Button = findViewById(R.id.verwaltungBtn)
+        verwaltunBut.setOnClickListener{
+            val intent = Intent(this, MaintenanceActivity::class.java)
+            startActivity(intent)
+        }
+
+        val mapBut: Button = findViewById(R.id.mapBtn)
+        mapBut.setOnClickListener{
+            val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
 
