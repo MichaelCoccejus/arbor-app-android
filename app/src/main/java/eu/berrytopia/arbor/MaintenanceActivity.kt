@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -31,6 +32,14 @@ class MaintenanceActivity : AppCompatActivity() {
         if (mGeoObject.isEmpty()) {
             gridView.visibility = View.GONE
         }
+
+        // add onclick listener for the images to see the information of the tree
+            /*val treeInformation: ImageView = findViewById(R.id.imageView)
+            treeInformation.setOnClickListener{
+                val intent = Intent(this, TreeInformationActivity::class.java)
+                startActivity(intent)
+            }*/
+
 
         val verwaltunBut: Button = findViewById(R.id.verwaltungBtn)
         verwaltunBut.setOnClickListener{
