@@ -28,8 +28,8 @@ class MapActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val verwaltunBut: Button = findViewById(R.id.verwaltungBtn)
-        verwaltunBut.setOnClickListener{
+        val verwaltungBtn: Button = findViewById(R.id.verwaltungBtn)
+        verwaltungBtn.setOnClickListener{
             val intent = Intent(this, MaintenanceActivity::class.java)
             startActivity(intent)
         }

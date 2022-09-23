@@ -22,7 +22,7 @@ class MaintenanceActivity : AppCompatActivity() {
         setContentView(R.layout.maintenance_activity)
 
         var mGeoObject: List<GeoObject> = listOf()
-        var treePicsList: List<Photos> = listOf()
+        var treePicsList: List<Media> = listOf()
 
         val gridView : RecyclerView = findViewById(R.id.treeGridView)
         gridView.layoutManager = GridLayoutManager(this, 5)

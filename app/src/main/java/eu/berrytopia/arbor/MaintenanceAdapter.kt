@@ -1,15 +1,15 @@
 package eu.berrytopia.arbor
 
 import android.content.Context
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 
-class MaintenanceAdapter(val context: Context, val mGeoObject: List<GeoObject>, val treePicList: List<Photos>) :
+class MaintenanceAdapter(val context: Context, val mGeoObject: List<GeoObject>, val treePicList: List<Media>) :
     RecyclerView.Adapter<MaintenanceAdapter.ViewHolder>() {
     inner class ViewHolder : RecyclerView.ViewHolder {
         var treePic: ImageView
@@ -29,7 +29,7 @@ class MaintenanceAdapter(val context: Context, val mGeoObject: List<GeoObject>, 
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.nameTextView.text = mGeoObject[position].name
-        holder.treePic.setImageURI(treePicList[position].fullUri)
+        holder.treePic.setImageURI(treePicList[position].fullUri.toUri())
     }
 
     override fun getItemCount(): Int {
