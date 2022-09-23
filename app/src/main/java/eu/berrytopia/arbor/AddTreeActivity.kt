@@ -30,6 +30,7 @@ class AddTreeActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)
 
+        // Hier wird aus dem selben Array die Strings bezogen. Es muss noch ein Array der User geben.
         val spinner: Spinner = findViewById(R.id.latinNames)
         ArrayAdapter.createFromResource(
             this,

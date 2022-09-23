@@ -41,8 +41,8 @@ class MaintenanceActivity : AppCompatActivity() {
             }*/
 
 
-        val verwaltunBut: Button = findViewById(R.id.verwaltungBtn)
-        verwaltunBut.setOnClickListener{
+        val verwaltungBut: Button = findViewById(R.id.verwaltungBtn)
+        verwaltungBut.setOnClickListener{
             val intent = Intent(this, MaintenanceActivity::class.java)
             startActivity(intent)
         }

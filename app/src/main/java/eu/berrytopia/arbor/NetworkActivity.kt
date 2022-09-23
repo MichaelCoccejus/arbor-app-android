@@ -74,4 +74,33 @@ class NetworkActivity {
     fun getTree() {
 
     }
+
+    /**
+     * @param idTree Referenz des Baumes für die DB
+     *
+     * Es soll eine Liste aller Events zurückgegeben werden,
+     * die NUR mit dem Baum mit spezifischen ID zusammenhängen.
+     *
+     * Derzeit wird wegen dem fehlendem Request eine leere Liste zurückgegeben.
+     *
+     * TODO: HTTP-Request an die REST mit erfolgreicher Rückgabe aufbauen.
+     */
+    fun getEvents(idTree: Long) : List<Event>{
+        // HttpRequest mit der Referenz des Baumes (ID)
+        return listOf()
+    }
+
+    /**
+     * @param idTree Referenz des Baumes für die DB
+     *
+     * Es soll eine Liste aller Tasks zurückgegeben werden,
+     * die NUR mit dem Baum mit spezifischen ID zusammenhängen.
+     *
+     * Derzeit wird wegen dem fehlendem Request eine leere Liste zurückgegeben.
+     *
+     * TODO: HTTP-Request an die REST mit erfolgreicher Rückgabe aufbauen.
+     */
+    fun getTasks(idTree: Long) : List<Task> {
+        return listOf()
+    }
 }

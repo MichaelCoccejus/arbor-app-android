@@ -22,12 +22,14 @@ class MapActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity)
 
+        // Nur zum Erstellen von Bäumen. Plantage werden zeitlich nicht reichen.
         val floatBut: FloatingActionButton = findViewById(R.id.floatingActionButton)
         floatBut.setOnClickListener {
             val intent = Intent(this, AddTreeActivity::class.java)
             startActivity(intent)
         }
 
+        // Eine vereinfachte Version von BottomNavigtionBar
         val verwaltungBtn: Button = findViewById(R.id.verwaltungBtn)
         verwaltungBtn.setOnClickListener{
             val intent = Intent(this, MaintenanceActivity::class.java)
@@ -40,11 +42,15 @@ class MapActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        // Ab hier sind die Funktion für die Karte
         initMap()
         initGps()
     }
 
-    // Geofence plantation
+    /*
+    Geofence Plantage
+    Die Fence sollte am Ende geladen werden.
+     */
     val fence =
         listOf(
             GeoPoint(49.948457, 7.936816), //top left
@@ -112,6 +118,7 @@ class MapActivity : AppCompatActivity() {
         map!!.controller.setZoom(19.0)
     }
 
+    // Für das Menü in der Toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_options, menu)
         return true

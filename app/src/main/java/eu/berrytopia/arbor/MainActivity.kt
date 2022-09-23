@@ -48,4 +48,8 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
+    fun checkLogin(userName: String, password: String) {
+
+    }
 }
