@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val net = NetworkActivity() // Wird für die Bearbeitung über Netzwerk benötigt.
 
         if (!Environment.isExternalStorageManager()) {
             val intent = Intent()
@@ -47,9 +48,5 @@ class MainActivity : AppCompatActivity() {
             val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }
-    }
-
-    fun checkLogin(userName: String, password: String) {
-
     }
 }

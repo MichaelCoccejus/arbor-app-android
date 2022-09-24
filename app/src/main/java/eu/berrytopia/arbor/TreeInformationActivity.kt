@@ -11,10 +11,11 @@ class TreeInformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tree_information)
+        val net = NetworkActivity()
 
         // Dem Intent wurde im Maintenance-Adapter der Baum als GeoObject übergeben
         val currentObject = intent.getSerializableExtra("GeoObj") as GeoObject
-        val net = NetworkActivity() // Wird für den Abruf der Events und Task benötigt.
+
 
         // Behandlung der Events
         val eventListView: RecyclerView = findViewById(R.id.eventRecyclerView)

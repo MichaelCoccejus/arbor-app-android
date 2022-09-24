@@ -22,7 +22,8 @@ class MaintenanceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.maintenance_activity)
 
-        var mGeoObject: List<GeoObject> = listOf()
+        val net = NetworkActivity()
+        var mGeoObject: List<GeoObject> = net.getTrees()
         var treePicsList: List<Media> = listOf()
 
         val gridView : RecyclerView = findViewById(R.id.treeGridView)

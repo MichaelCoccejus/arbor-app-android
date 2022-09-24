@@ -1,10 +1,16 @@
 package eu.berrytopia.arbor
 
+import android.content.Context
+import android.widget.Toast
+import com.android.volley.Request
+import com.android.volley.toolbox.JsonObjectRequest
+
 class NetworkActivity {
-    /*
-   *   Network-Klasse sollte die Funktionalitäten des Clients im Netz abdecken.
-   *   Dazu zählen Login-Prozess, Datenabruf vom Server und Datenspeicherung zum Server.
-    */
+    /**
+     *   Network-Klasse sollte die Funktionalitäten des Clients im Netz abdecken.
+     *   Dazu zählen Login-Prozess, Datenabruf vom Server und Datenspeicherung zum Server.
+     */
+    lateinit var url: String
 
 
     /** TODO: Implementing Login-Function
@@ -24,6 +30,36 @@ class NetworkActivity {
      *  Es soll mit diesen Daten ein neuer User auf dem Server angelegt werden.
      */
     fun createUser(userName: String, passWord: String) {
+
+    }
+
+    fun getUsers(context: Context): MutableList<AborUser> {
+        val result: MutableList<AborUser> = mutableListOf()
+
+        url = "arbor.berrytopia.eu:8080/api/v1/"
+        var stringRequest = JsonObjectRequest(Request.Method.GET, url, null,
+            { response ->
+                val jsonArray = response.getJSONArray("users")
+                for (i in 0 until jsonArray.length()) {
+                    val currentAborUser = AborUser()
+                    val currentUser = jsonArray.getJSONObject(i)
+                    currentAborUser.id = currentUser.getString("id").toLong()
+                    currentAborUser.firstName = currentUser.getString("firstName")
+                    currentAborUser.lastName = currentUser.getString("lastName")
+                    currentAborUser.nickName = currentUser.getString("nickName")
+                    currentAborUser.email = currentUser.getString("email")
+                    result.add(currentAborUser)
+                }
+            },
+            {
+                error ->
+                Toast.makeText(context, error.message,Toast.LENGTH_SHORT).show()
+            })
+
+        return result
+    }
+
+    fun getUser(id: Long) {
 
     }
 
@@ -71,8 +107,12 @@ class NetworkActivity {
      *  Die Rückgabe muss noch hinzugefügt werden.
      *  Die Funktion Baum gibt mit einem Geo-Punkte zurück.
      */
-    fun getTree() {
+    fun getTree(id: Long) {
 
+    }
+
+    fun getTrees() : List<GeoObject>{
+        return emptyList()
     }
 
     /**
@@ -85,9 +125,9 @@ class NetworkActivity {
      *
      * TODO: HTTP-Request an die REST mit erfolgreicher Rückgabe aufbauen.
      */
-    fun getEvents(idTree: Long) : List<Event>{
+    fun getEvents(idTree: Long): List<Event> {
         // HttpRequest mit der Referenz des Baumes (ID)
-        return listOf()
+        return emptyList()
     }
 
     /**
@@ -100,7 +140,11 @@ class NetworkActivity {
      *
      * TODO: HTTP-Request an die REST mit erfolgreicher Rückgabe aufbauen.
      */
-    fun getTasks(idTree: Long) : List<Task> {
-        return listOf()
+    fun getTasks(idTree: Long): List<Task> {
+        return emptyList()
+    }
+
+    fun getLatinNames(): Array<String> {
+        return emptyArray()
     }
 }

@@ -1,9 +1,8 @@
 package eu.berrytopia.arbor
 
-import java.util.Date
-import java.util.LinkedList
-import kotlin.properties.Delegates
 import java.io.Serializable
+import java.util.*
+import kotlin.properties.Delegates
 
 open class GeoObject : Serializable {
     var idOfObject: Long by Delegates.notNull() // Eigene ID
@@ -19,6 +18,7 @@ open class GeoObject : Serializable {
 
     fun setTypeTree() {
         typeOfObject = "Baum"
-        //area =
+        area = LinkedList<GpsPosition>()
+        typeOfParent = "Plantage"
     }
 }

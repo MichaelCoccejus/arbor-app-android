@@ -21,16 +21,12 @@ class AddTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtask_activity)
 
-        // Hier wird aus dem selben Array die Strings bezogen. Es muss noch ein Array der User geben.
+        val net = NetworkActivity()
+        val userList = net.getUsers(this)
+
         val spinner: Spinner = findViewById(R.id.userSelection)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.testArray,
-            android.R.layout.simple_spinner_item // Es gibt bereits eine vorgegebene Liste wie die Items angezeigt werden. simple_spinner_item ist eine Darstellung.
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-            spinner.adapter = adapter
-        }
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, userList)
+        spinner.adapter = arrayAdapter
 
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED)

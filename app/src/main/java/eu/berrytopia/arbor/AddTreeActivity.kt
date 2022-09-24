@@ -4,6 +4,7 @@ import android.Manifest
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -30,20 +31,23 @@ import java.util.*
 
 class AddTreeActivity : AppCompatActivity() {
     var cameraRequest = 1888
-    lateinit var imageView: ImageView
+    var imageView: ImageView = findViewById(R.id.imageHolder)
+    val longitudeView: TextView = findViewById(R.id.longitudeTextView)
+    val latitudeView: TextView = findViewById(R.id.latitudeTextView)
+    val altitudeView: TextView = findViewById(R.id.altitudeTextView)
 
     /**
      * Die Ansicht (addtree_activity) dient zum Erstellen neuer Bäume.
      * Die lateinischen Namen werden aus der Datenbank bezogen und als Array im res>values>strings.xml abgelegt.
      * Bekannte Informationen sollten automatisch hinzugefügt werden.
      *
-     * TODO: Eventuelle Manipulation des Arrays für lateinische Namen.
      * TODO: Plantage muss zur Ansicht zu Verfügung gestellt werden.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)
 
+        val net = NetworkActivity()
         val newGeoObject = GeoObject()
         newGeoObject.setTypeTree()
         val client: FusedLocationProviderClient =
@@ -52,16 +56,13 @@ class AddTreeActivity : AppCompatActivity() {
         val latitudeView: TextView = findViewById(R.id.latitudeTextView)
         val altitudeView: TextView = findViewById(R.id.altitudeTextView)
 
+        //val latinNameArray: Array<String> = net.getLatinNames()
+        val latinNameArray: Array<String> = arrayOf("Test", "Mushroom", "Mario")
+
         // Hier wird aus dem selben Array die Strings bezogen. Es muss noch ein Array der User geben.
         val spinner: Spinner = findViewById(R.id.latinNames)
-        ArrayAdapter.createFromResource(
-            this,
-            R.array.testArray,
-            android.R.layout.simple_spinner_item // Es gibt bereits eine vorgegebene Liste wie die Items angezeigt werden. simple_spinner_item ist eine Darstellung.
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-            spinner.adapter = adapter
-        }
+        val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, latinNameArray)
+        spinner.adapter = arrayAdapter
 
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED
@@ -73,7 +74,6 @@ class AddTreeActivity : AppCompatActivity() {
             )
         imageView = findViewById(R.id.imageHolder)
         val photoBtn: Button = findViewById(R.id.photoEventBtn2)
-
         photoBtn.setOnClickListener {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
            startActivityForResult(cameraIntent, cameraRequest)
