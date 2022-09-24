@@ -24,7 +24,7 @@
                 android:text="@string/longitudeText" />
 
             <TextView
-                android:id="@+id/longitudetextView"
+                android:id="@+id/longitudeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/placeholder" />
@@ -41,7 +41,7 @@
                 android:text="@string/latitudeText" />
 
             <TextView
-                android:id="@+id/latitudetextView"
+                android:id="@+id/latitudeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/placeholder" />
@@ -58,7 +58,7 @@
                 android:text="@string/altitudeText" />
 
             <TextView
-                android:id="@+id/altitudetextView"
+                android:id="@+id/altitudeTextView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:text="@string/placeholder" />

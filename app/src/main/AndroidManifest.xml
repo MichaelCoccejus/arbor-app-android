@@ -35,5 +35,6 @@
         <activity android:name=".MaintenanceActivity" />
         <activity android:name=".AddEventActivity" />
         <activity android:name=".TreeInformationActivity" />
+        <activity android:name=".AddTaskActivity" />
     </application>
 </manifest>

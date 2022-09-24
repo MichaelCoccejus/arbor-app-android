@@ -7,7 +7,7 @@ import java.io.Serializable
 
 open class GeoObject : Serializable {
     var idOfObject: Long by Delegates.notNull() // Eigene ID
-    lateinit var typeOfObject: String // Eigener Typ
+    private lateinit var typeOfObject: String // Eigener Typ
     var idOfParent: Long by Delegates.notNull() // ID der Plantage
     lateinit var typeOfParent: String // Typ Plantage damit es nicht mehrfach überprüft werden muss.
     var relatedUser: Long by Delegates.notNull() // ID des User als Referenz aus der Datenbank.
@@ -16,4 +16,9 @@ open class GeoObject : Serializable {
     lateinit var area: LinkedList<GpsPosition> // Wird nur für Typ Plantage verwendet (ist leer/null, wenn GeoObject ein Baum ist).
     lateinit var taskList: List<Task>
     lateinit var date: Date
+
+    fun setTypeTree() {
+        typeOfObject = "Baum"
+        //area =
+    }
 }

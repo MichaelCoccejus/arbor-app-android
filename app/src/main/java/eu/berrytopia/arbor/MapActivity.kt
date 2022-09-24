@@ -83,7 +83,12 @@ class MapActivity : AppCompatActivity() {
     private fun initGps() {
         client = LocationServices.getFusedLocationProviderClient(this)
         client.requestLocationUpdates(
-            LocationRequest().setInterval(1000).setPriority(Priority.PRIORITY_HIGH_ACCURACY),
+            /*
+             Nicht deprecated wenn es über den statischen Weg geht.
+             Intervall und Priority könnte man noch über apply statt setInterval und setPriority setzen.
+             */
+            LocationRequest.create().setInterval(1000).setPriority(Priority.PRIORITY_HIGH_ACCURACY),
+            //LocationRequest().setInterval(1000).setPriority(Priority.PRIORITY_HIGH_ACCURACY),
             locationCallBack,
             Looper.myLooper()
         )
