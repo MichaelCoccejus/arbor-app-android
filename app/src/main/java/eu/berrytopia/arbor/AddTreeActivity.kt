@@ -1,32 +1,22 @@
 package eu.berrytopia.arbor
 
 import android.Manifest
-import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.media.ExifInterface
-
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
-import android.view.inputmethod.InputContentInfo
 import android.widget.*
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.net.toUri
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
 import java.io.*
 import java.net.URL
-import java.net.URI
-import java.nio.Buffer
 import java.util.*
 
 class AddTreeActivity : AppCompatActivity() {
@@ -47,14 +37,9 @@ class AddTreeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)
 
-        val net = NetworkActivity()
+        val net = NetworkActivity(this)
         val newGeoObject = GeoObject()
         newGeoObject.setTypeTree()
-        val client: FusedLocationProviderClient =
-            LocationServices.getFusedLocationProviderClient(this)
-        val longitudeView: TextView = findViewById(R.id.longitudeTextView)
-        val latitudeView: TextView = findViewById(R.id.latitudeTextView)
-        val altitudeView: TextView = findViewById(R.id.altitudeTextView)
 
         //val latinNameArray: Array<String> = net.getLatinNames()
         val latinNameArray: Array<String> = arrayOf("Test", "Mushroom", "Mario")
@@ -64,6 +49,7 @@ class AddTreeActivity : AppCompatActivity() {
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, latinNameArray)
         spinner.adapter = arrayAdapter
 
+        // Funktionalität für die Kamera.
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
             == PackageManager.PERMISSION_DENIED
         )
@@ -76,7 +62,20 @@ class AddTreeActivity : AppCompatActivity() {
         val photoBtn: Button = findViewById(R.id.photoEventBtn2)
         photoBtn.setOnClickListener {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-           startActivityForResult(cameraIntent, cameraRequest)
+            startActivityForResult(cameraIntent, cameraRequest)
+        }
+
+        val nameEditText: EditText = findViewById(R.id.editTextName)
+        val sizeEditText: EditText = findViewById(R.id.editTextSize)
+        val saveBtn: Button = findViewById(R.id.saveTreeButton)
+        saveBtn.setOnClickListener {
+            newGeoObject.name = nameEditText.text.toString()
+
+        }
+
+        val discardBtn: Button = findViewById(R.id.discardTreeButton)
+        discardBtn.setOnClickListener {
+
         }
     }
 
@@ -104,13 +103,14 @@ class AddTreeActivity : AppCompatActivity() {
             val lon = findViewById<TextView>(R.id.longitudeTextView)
             val alt = findViewById<TextView>(R.id.altitudeTextView)
 
-            lat.setText(exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE))
-            lon.setText(exif.getAttribute(ExifInterface.TAG_GPS_DEST_LONGITUDE))
-            alt.setText(exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE))
+            lat.text = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
+            lon.text = exif.getAttribute(ExifInterface.TAG_GPS_DEST_LONGITUDE)
+            alt.text = exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE)
         }
     }
+
     /*
-    *  Funktion, die aus der Bitmap ein JPEG macht,  und die URL zurückgibt,
+    * Funktion, die aus der Bitmap ein JPEG macht,  und die URL zurückgibt,
     * damit man mit dem ExifInterface die GPS Daten auslesen kann
     *
     */
@@ -122,18 +122,18 @@ class AddTreeActivity : AppCompatActivity() {
 
         try {
             val bos = ByteArrayOutputStream()
-            val stream : OutputStream = FileOutputStream(file)
+            val stream: OutputStream = FileOutputStream(file)
             photo.compress(Bitmap.CompressFormat.JPEG, 100, bos)
             val bitmapData = bos.toByteArray()
             stream.write(bitmapData)
             stream.flush()
             stream.close()
-        }
-        catch (e: IOException) {
+        } catch (e: IOException) {
             e.printStackTrace()
         }
         return file.toURI().toURL()
     }
+
     /*
     * Funktion die das Foto mit gegebenem Namen in den Dateien abspeichert
     *
@@ -142,7 +142,10 @@ class AddTreeActivity : AppCompatActivity() {
         //create a file to write bitmap data
         var file: File? = null
         try {
-            file = File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES).toString() + File.separator + fileNameToSave)
+            file = File(
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+                    .toString() + File.separator + fileNameToSave
+            )
             file.createNewFile()
 
             //Convert bitmap to byte array

@@ -1,14 +1,19 @@
 package eu.berrytopia.arbor
 
+import kotlin.properties.Delegates
+
 // Dient zur Speicherung von GPS-Daten.
 class GpsPosition {
-    private var longitude: Long
-    private var latitude: Long
-    private var altitude: Long
+    var id: Long by Delegates.notNull()
+    var longitude: Double by Delegates.notNull()
+    var latitude: Double by Delegates.notNull()
+    var altitude: Long by Delegates.notNull()
 
-    constructor(iLongitude: Long, iLatitude: Long, iAltitude: Long) {
+    constructor(iLongitude: Double, iLatitude: Double, iAltitude: Long) {
         this.longitude = iLongitude
         this.latitude = iLatitude
         this.altitude = iAltitude
     }
+
+    constructor()
 }

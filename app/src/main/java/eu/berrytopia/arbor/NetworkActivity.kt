@@ -3,15 +3,33 @@ package eu.berrytopia.arbor
 import android.content.Context
 import android.widget.Toast
 import com.android.volley.Request
-import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.Volley
+import org.json.JSONObject
 
 class NetworkActivity {
     /**
      *   Network-Klasse sollte die Funktionalitäten des Clients im Netz abdecken.
      *   Dazu zählen Login-Prozess, Datenabruf vom Server und Datenspeicherung zum Server.
+     *
+     *   Es wird nur JsonArrayRequest abgeschickt, da der Json bei einem JsonObjectRequest eine Json mit Json-Objekten ohne Keys zurückgibt
+     *   und die Bearbeitung der Json-Objekten erschwert. Mit JsonArrayRequest wird ein Array der Json-Objekte als response erwartet.
      */
-    lateinit var url: String
+    private val urlBase: String =
+        "arbor.berrytopia.eu:8080/api/v1/" // Die Adresse ändert sich nicht. Lediglich was angehängt wird.
+    private lateinit var url: String
+    private var requestQueue: RequestQueue
+    private var context: Context
+    /*
+    Wir bewegen uns im selben Context und wechseln nicht (Keine Mitgabe über Intent, sondern erneuter Aufruf).
+    Der Konstruktor wird im neuen Context aufgerufen.
+     */
 
+    constructor(context: Context) {
+        this.context = context
+        requestQueue = Volley.newRequestQueue(context)
+    }
 
     /** TODO: Implementing Login-Function
      *  @param userName Übergebener Username vom Login-Screen
@@ -33,54 +51,25 @@ class NetworkActivity {
 
     }
 
-    fun getUsers(context: Context): MutableList<AborUser> {
+    fun getUsers(): MutableList<AborUser> {
         val result: MutableList<AborUser> = mutableListOf()
 
-        url = "arbor.berrytopia.eu:8080/api/v1/"
-        var stringRequest = JsonObjectRequest(Request.Method.GET, url, null,
-            { response ->
-                val jsonArray = response.getJSONArray("users")
-                for (i in 0 until jsonArray.length()) {
-                    val currentAborUser = AborUser()
-                    val currentUser = jsonArray.getJSONObject(i)
-                    currentAborUser.id = currentUser.getString("id").toLong()
-                    currentAborUser.firstName = currentUser.getString("firstName")
-                    currentAborUser.lastName = currentUser.getString("lastName")
-                    currentAborUser.nickName = currentUser.getString("nickName")
-                    currentAborUser.email = currentUser.getString("email")
-                    result.add(currentAborUser)
+        url = urlBase + "users"
+        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
+            { response -> // Wir als Array von JsonObjects zurückgegeben.
+                for (i in 0 until response.length()) {
+                    val currentUser = response.getJSONObject(i)
+                    result.add(extractUserFromJson(currentUser))
                 }
             },
-            {
-                error ->
-                Toast.makeText(context, error.message,Toast.LENGTH_SHORT).show()
+            { error ->
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             })
-
+        requestQueue.add(jsonArrayRequest)
         return result
     }
 
     fun getUser(id: Long) {
-
-    }
-
-    /** TODO: Implementing Getter for data from sensors
-     *
-     * Daten sollten vom Server abgerufen werden.
-     * Parameter und Rückgabe muss noch hinzugefügt werden.
-     */
-    fun getSensorData() {
-
-    }
-
-    /** TODO: Implementing Setter for a new plantage and sending 4 Points to server
-     *  @param geoPoint1 1. Geopunkt der Plantage
-     *  @param geoPoint2 2. Geopunkt der Plantage
-     *  @param geoPoint3 3. Geopunkt der Plantage
-     *  @param geoPoint4 4. Geopunkt der Plantage
-     *
-     *  Die Daten sollten dem Server gesendet werden, damit sie jederzeit abgerufen werden können.
-     */
-    fun createPlantage(geoPoint1: Int, geoPoint2: Int, geoPoint3: Int, geoPoint4: Int) {
 
     }
 
@@ -111,8 +100,28 @@ class NetworkActivity {
 
     }
 
-    fun getTrees() : List<GeoObject>{
-        return emptyList()
+    fun getTrees(): List<GeoObject> {
+        val result: MutableList<GeoObject> = mutableListOf()
+
+        url = urlBase + "objects"
+        val jsonObjectRequest = JsonArrayRequest(Request.Method.GET, url, null,
+            { response ->
+                for (i in 0 until response.length()) {
+                    val currentTree = GeoObject()
+                    val currentObject = response.getJSONObject(i)
+                    if (currentObject.getString("type") == "Baum") {
+                        currentTree.setTypeTree()
+                        currentTree.idOfObject = currentObject.get("id") as Long
+                        //currentTree.idOfParent = currentObject.getString("relatedGeoObject").toLong()
+                        currentTree.position = currentObject.get("gpsPostion") as GpsPosition
+
+                    }
+                }
+            },
+            { error ->
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            })
+        return result
     }
 
     /**
@@ -146,5 +155,24 @@ class NetworkActivity {
 
     fun getLatinNames(): Array<String> {
         return emptyArray()
+    }
+
+    fun extractUserFromJson(extractingFrom: JSONObject) : AborUser{
+        val extractingTo = AborUser()
+        extractingTo.id = extractingFrom.get("id") as Long
+        extractingTo.firstName = extractingFrom.getString("firstName")
+        extractingTo.lastName = extractingFrom.getString("lastName")
+        extractingTo.nickName = extractingFrom.getString("nickName")
+        extractingTo.email = extractingFrom.getString("email")
+        return extractingTo
+    }
+
+    fun extractGpsPositionFromJson(extractingFrom: JSONObject) : GpsPosition {
+        val extractingTo = GpsPosition()
+        extractingTo.id = extractingFrom.getLong("id")
+        extractingTo.longitude = extractingFrom.getDouble("longitude")
+        extractingTo.latitude = extractingFrom.getDouble("latitude")
+        extractingTo.altitude = extractingFrom.getLong("altitude")
+        return extractingTo
     }
 }
