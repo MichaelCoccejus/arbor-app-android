@@ -6,6 +6,6 @@ class AborUser {
     var id: Long by Delegates.notNull()
     lateinit var firstName: String
     lateinit var lastName: String
-    lateinit var nickName: String
+    lateinit var nickname: String
     lateinit var email: String
 }

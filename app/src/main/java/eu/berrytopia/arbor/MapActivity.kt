@@ -18,6 +18,12 @@ import org.osmdroid.views.MapView
 
 
 class MapActivity : AppCompatActivity() {
+    // Für das Menü in der Toolbar
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.toolbar_options, menu)
+        return true
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity)
@@ -25,8 +31,8 @@ class MapActivity : AppCompatActivity() {
         // Nur zum Erstellen von Bäumen. Plantage werden zeitlich nicht reichen.
         val floatBut: FloatingActionButton = findViewById(R.id.floatingActionButton)
         floatBut.setOnClickListener {
-            val intent = Intent(this, AddTreeActivity::class.java)
-            startActivity(intent)
+                val intent = Intent(this, AddTreeActivity::class.java)
+                startActivity(intent)
         }
 
         // Eine vereinfachte Version von BottomNavigtionBar
@@ -123,9 +129,5 @@ class MapActivity : AppCompatActivity() {
         map!!.controller.setZoom(19.0)
     }
 
-    // Für das Menü in der Toolbar
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.toolbar_options, menu)
-        return true
-    }
+
 }

@@ -5,8 +5,11 @@ import android.widget.Toast
 import com.android.volley.Request
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
+import org.json.JSONArray
 import org.json.JSONObject
+import java.sql.Timestamp
 
 class NetworkActivity {
     /**
@@ -24,6 +27,18 @@ class NetworkActivity {
     /*
     Wir bewegen uns im selben Context und wechseln nicht (Keine Mitgabe über Intent, sondern erneuter Aufruf).
     Der Konstruktor wird im neuen Context aufgerufen.
+    Der Context wird für die Toast benötigt ( Noch keine Ahnung, ob es klappt ).
+    */
+
+    /*
+    Joke of day 1
+
+    Gefundener Kommentar unter dem Kampf zwischen Gandalf und dem Balrog in Khazad'dum (anderer Name für Moria).
+
+    Gandalf tells the party to run so he can kill the final boss and get all the XP.
+    Then he shows up next session all leveld up and with new robes and a new staff.
+
+    Scumbag Gandalf.
      */
 
     constructor(context: Context) {
@@ -55,7 +70,10 @@ class NetworkActivity {
         val result: MutableList<AborUser> = mutableListOf()
 
         url = urlBase + "users"
-        val jsonArrayRequest = JsonArrayRequest(Request.Method.GET, url, null,
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null,
             { response -> // Wir als Array von JsonObjects zurückgegeben.
                 for (i in 0 until response.length()) {
                     val currentUser = response.getJSONObject(i)
@@ -82,17 +100,7 @@ class NetworkActivity {
 
     }
 
-    /** TODO: Implementing Setter for a new plantage and sending 1 Point to server
-     *  @param geoPoint Geopunkt des Baums.
-     *
-     *  Die Daten sollten dem Server gesendet werden, damit sie jederzeit abgerufen werden können.
-     */
-    fun createTree(geoPoint: Int) {
-
-    }
-
-    /** TODO: Implementing Getter for an already created tree.
-     *
+    /**
      *  Die Rückgabe muss noch hinzugefügt werden.
      *  Die Funktion Baum gibt mit einem Geo-Punkte zurück.
      */
@@ -104,24 +112,60 @@ class NetworkActivity {
         val result: MutableList<GeoObject> = mutableListOf()
 
         url = urlBase + "objects"
-        val jsonObjectRequest = JsonArrayRequest(Request.Method.GET, url, null,
+        val jsonObjectRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null,
             { response ->
                 for (i in 0 until response.length()) {
                     val currentTree = GeoObject()
                     val currentObject = response.getJSONObject(i)
-                    if (currentObject.getString("type") == "Baum") {
+                    if (currentObject.getString("type") == "TREE") {
                         currentTree.setTypeTree()
                         currentTree.idOfObject = currentObject.get("id") as Long
-                        //currentTree.idOfParent = currentObject.getString("relatedGeoObject").toLong()
                         currentTree.position = currentObject.get("gpsPostion") as GpsPosition
-
+                        currentTree.relatedUser =
+                            extractUserListFromJson(currentObject.getJSONArray("relatedUsers"))
+                        currentTree.description = currentObject.getString("userDescription")
+                        currentTree.eventList = extractEventsFromJson(
+                            currentObject.getJSONArray("events"),
+                            currentTree.idOfObject
+                        )
+                        currentTree.time = currentObject.get("createdTime") as Timestamp
                     }
                 }
             },
             { error ->
                 Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
             })
+        requestQueue.add(jsonObjectRequest)
         return result
+    }
+
+    fun addTree(toAdd: GeoObject): Boolean {
+        var successValue = false
+
+        val params: MutableMap<Any?, Any?> = mutableMapOf()
+        params[""] = toAdd
+
+        url = urlBase + "objects"
+        val objectRequest = JsonObjectRequest(
+            Request.Method.POST,
+            url,
+            JSONObject(params), // Muss nachgelesen und getestet werden. Das sollte eigentlich dann der Body sein.
+            { response ->
+                successValue = true
+                Toast.makeText(context, "Konnte nicht abgespeichert werden.", Toast.LENGTH_SHORT)
+                    .show()
+            },
+            { error ->
+                successValue = false
+                Toast.makeText(context, "Konnte nicht abgespeichert werden.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        )
+        requestQueue.add(objectRequest)
+        return successValue
     }
 
     /**
@@ -157,22 +201,51 @@ class NetworkActivity {
         return emptyArray()
     }
 
-    fun extractUserFromJson(extractingFrom: JSONObject) : AborUser{
+    private fun extractUserFromJson(extractingFrom: JSONObject): AborUser {
         val extractingTo = AborUser()
         extractingTo.id = extractingFrom.get("id") as Long
         extractingTo.firstName = extractingFrom.getString("firstName")
         extractingTo.lastName = extractingFrom.getString("lastName")
-        extractingTo.nickName = extractingFrom.getString("nickName")
+        extractingTo.nickname = extractingFrom.getString("nickName")
         extractingTo.email = extractingFrom.getString("email")
         return extractingTo
     }
 
-    fun extractGpsPositionFromJson(extractingFrom: JSONObject) : GpsPosition {
-        val extractingTo = GpsPosition()
-        extractingTo.id = extractingFrom.getLong("id")
-        extractingTo.longitude = extractingFrom.getDouble("longitude")
-        extractingTo.latitude = extractingFrom.getDouble("latitude")
-        extractingTo.altitude = extractingFrom.getLong("altitude")
+    private fun extractUserListFromJson(extractingFrom: JSONArray): List<AborUser> {
+        val extractingTo: MutableList<AborUser> = mutableListOf()
+        for (i in 0 until extractingFrom.length()) {
+            extractingTo.add(extractUserFromJson(extractingFrom[i] as JSONObject))
+        }
         return extractingTo
     }
+
+    private fun extractEventFromJson(
+        extractingFrom: JSONObject,
+        id: Long
+    ): Event {
+        val extractingTo = Event()
+        extractingTo.id = extractingFrom.getLong("id")
+        extractingTo.eventType = extractingFrom.getString("eventType")
+        extractingTo.idOfReference = id
+        extractingTo.typeOfReference = "Baum"
+        return extractingTo
+    }
+
+    private fun extractEventsFromJson(
+        extractingFrom: JSONArray,
+        id: Long,
+    ): List<Event> {
+        val extractingTo = mutableListOf<Event>()
+        for (i in 0 until extractingFrom.length()) {
+            extractingTo.add(
+                extractEventFromJson(
+                    extractingFrom[i] as JSONObject,
+                    id
+                )
+            )
+        }
+        return extractingTo
+    }
+
+
 }

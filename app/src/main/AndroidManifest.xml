@@ -21,6 +21,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Arbor"
         tools:targetApi="31">
+        <activity android:name=".AddEventActivity" />
+        <activity android:name=".AddTaskActivity" />
+        <activity android:name=".AddTreeActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
@@ -30,11 +33,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MapActivity" />
-        <activity android:name=".AddTreeActivity" />
         <activity android:name=".MaintenanceActivity" />
-        <activity android:name=".AddEventActivity" />
+        <activity android:name=".MapActivity" />
         <activity android:name=".TreeInformationActivity" />
-        <activity android:name=".AddTaskActivity" />
+
     </application>
 </manifest>

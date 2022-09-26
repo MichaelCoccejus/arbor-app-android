@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        val net = NetworkActivity() // Wird für die Bearbeitung über Netzwerk benötigt.
+        //val net = NetworkActivity(this) // Wird für die Bearbeitung über Netzwerk benötigt.
 
         if (!Environment.isExternalStorageManager()) {
             val intent = Intent()

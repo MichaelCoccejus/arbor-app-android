@@ -21,25 +21,22 @@ import java.util.*
 
 class AddTreeActivity : AppCompatActivity() {
     var cameraRequest = 1888
-    var imageView: ImageView = findViewById(R.id.imageHolder)
-    val longitudeView: TextView = findViewById(R.id.longitudeTextView)
-    val latitudeView: TextView = findViewById(R.id.latitudeTextView)
-    val altitudeView: TextView = findViewById(R.id.altitudeTextView)
+    lateinit var imageView: ImageView
 
     /**
      * Die Ansicht (addtree_activity) dient zum Erstellen neuer Bäume.
      * Die lateinischen Namen werden aus der Datenbank bezogen und als Array im res>values>strings.xml abgelegt.
      * Bekannte Informationen sollten automatisch hinzugefügt werden.
      *
-     * TODO: Plantage muss zur Ansicht zu Verfügung gestellt werden.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)
 
-        val net = NetworkActivity(this)
+        //val net = NetworkActivity(this)
         val newGeoObject = GeoObject()
         newGeoObject.setTypeTree()
+        //net.addTree(newGeoObject)
 
         //val latinNameArray: Array<String> = net.getLatinNames()
         val latinNameArray: Array<String> = arrayOf("Test", "Mushroom", "Mario")
@@ -48,6 +45,7 @@ class AddTreeActivity : AppCompatActivity() {
         val spinner: Spinner = findViewById(R.id.latinNames)
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, latinNameArray)
         spinner.adapter = arrayAdapter
+        //spinner.setSelection(0)
 
         // Funktionalität für die Kamera.
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
@@ -58,7 +56,7 @@ class AddTreeActivity : AppCompatActivity() {
                 arrayOf(Manifest.permission.CAMERA),
                 cameraRequest
             )
-        imageView = findViewById(R.id.imageHolder)
+        imageView = findViewById(R.id.imageViewTree)
         val photoBtn: Button = findViewById(R.id.photoEventBtn2)
         photoBtn.setOnClickListener {
             val cameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
@@ -66,7 +64,7 @@ class AddTreeActivity : AppCompatActivity() {
         }
 
         val nameEditText: EditText = findViewById(R.id.editTextName)
-        val sizeEditText: EditText = findViewById(R.id.editTextSize)
+        // val sizeEditText: EditText = findViewById(R.id.editTextSize)
         val saveBtn: Button = findViewById(R.id.saveTreeButton)
         saveBtn.setOnClickListener {
             newGeoObject.name = nameEditText.text.toString()
@@ -75,8 +73,11 @@ class AddTreeActivity : AppCompatActivity() {
 
         val discardBtn: Button = findViewById(R.id.discardTreeButton)
         discardBtn.setOnClickListener {
-
+            //val intent = Intent(this, AddTreeActivity::class.java)
+            //startActivity(intent)
         }
+
+        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

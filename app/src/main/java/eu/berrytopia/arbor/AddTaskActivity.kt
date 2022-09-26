@@ -21,8 +21,8 @@ class AddTaskActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtask_activity)
 
-        val net = NetworkActivity()
-        val userList = net.getUsers(this)
+        val net = NetworkActivity(this)
+        val userList = net.getUsers()
 
         val spinner: Spinner = findViewById(R.id.userSelection)
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, userList)

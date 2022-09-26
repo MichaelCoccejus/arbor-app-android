@@ -22,9 +22,9 @@ class MaintenanceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.maintenance_activity)
 
-        val net = NetworkActivity()
+        val net = NetworkActivity(this)
         var mGeoObject: List<GeoObject> = net.getTrees()
-        var treePicsList: List<Media> = listOf()
+        var treePicsList: List<Media> = emptyList() //net.getObjectMedia()
 
         val gridView : RecyclerView = findViewById(R.id.treeGridView)
         gridView.layoutManager = GridLayoutManager(this, 5)
@@ -33,14 +33,6 @@ class MaintenanceActivity : AppCompatActivity() {
         if (mGeoObject.isEmpty()) {
             gridView.visibility = View.GONE
         }
-
-        // add onclick listener for the images to see the information of the tree
-            /*val treeInformation: ImageView = findViewById(R.id.imageView)
-            treeInformation.setOnClickListener{
-                val intent = Intent(this, TreeInformationActivity::class.java)
-                startActivity(intent)
-            }*/
-
 
         val verwaltungBut: Button = findViewById(R.id.verwaltungBtn)
         verwaltungBut.setOnClickListener{

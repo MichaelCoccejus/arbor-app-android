@@ -67,7 +67,7 @@
     </TableLayout>
 
     <ImageView
-        android:id="@+id/imageHolder"
+        android:id="@+id/imageViewTree"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="24dp"
