@@ -13,7 +13,7 @@ class TreeInformationActivity : AppCompatActivity() {
         setContentView(R.layout.tree_information)
         val net = NetworkActivity(this)
 
-        // Dem Intent wurde im Maintenance-Adapter der Baum als GeoObject übergeben
+        // Dem Intent wurde im Maintenance-Adapter der Baum als GeoObject übergeben.
         val currentObject = intent.getSerializableExtra("GeoObj") as GeoObject
 
 

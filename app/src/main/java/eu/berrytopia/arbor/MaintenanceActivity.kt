@@ -23,16 +23,12 @@ class MaintenanceActivity : AppCompatActivity() {
         setContentView(R.layout.maintenance_activity)
 
         val net = NetworkActivity(this)
-        var mGeoObject: List<GeoObject> = net.getTrees()
-        var treePicsList: List<Media> = emptyList() //net.getObjectMedia()
+        val mGeoObject: List<GeoObject> = net.getTrees()
+        val treePicsList: List<Media> = net.getObjectMedia()
 
         val gridView : RecyclerView = findViewById(R.id.treeGridView)
         gridView.layoutManager = GridLayoutManager(this, 5)
         gridView.adapter = MaintenanceAdapter(this, mGeoObject, treePicsList)
-
-        if (mGeoObject.isEmpty()) {
-            gridView.visibility = View.GONE
-        }
 
         val verwaltungBut: Button = findViewById(R.id.verwaltungBtn)
         verwaltungBut.setOnClickListener{
