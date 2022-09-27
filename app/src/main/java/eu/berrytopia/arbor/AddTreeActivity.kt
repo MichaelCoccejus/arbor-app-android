@@ -68,7 +68,7 @@ class AddTreeActivity : AppCompatActivity() {
         val saveBtn: Button = findViewById(R.id.saveTreeButton)
         saveBtn.setOnClickListener {
             newGeoObject.name = nameEditText.text.toString()
-
+            
         }
 
         val discardBtn: Button = findViewById(R.id.discardTreeButton)
