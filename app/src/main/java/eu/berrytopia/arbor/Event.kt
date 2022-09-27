@@ -3,7 +3,8 @@ package eu.berrytopia.arbor
 import java.sql.Timestamp
 import kotlin.properties.Delegates
 
-class Event : GeoObject() {
+class Event {
+    // Keine Erweiterung durch GeoObject solange es eine Data Klasse ist.
     var id: Long by Delegates.notNull()
     var idOfReference: Long by Delegates.notNull()
     lateinit var typeOfReference: String

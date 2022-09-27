@@ -5,9 +5,9 @@ import java.sql.Timestamp
 import java.util.*
 import kotlin.properties.Delegates
 
-open class GeoObject : Serializable {
+open class GeoObject() : Serializable {
     var idOfObject: Long by Delegates.notNull() // Eigene ID
-    private lateinit var typeOfObject: String // Eigener Typ
+    lateinit var typeOfObject: String // Eigener Typ
     //var idOfParent: Long by Delegates.notNull() // ID der Plantage
     lateinit var typeOfParent: String // Typ Plantage damit es nicht mehrfach überprüft werden muss.
     lateinit var relatedUser: List<AborUser>

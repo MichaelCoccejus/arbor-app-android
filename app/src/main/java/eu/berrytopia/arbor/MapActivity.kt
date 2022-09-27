@@ -94,7 +94,6 @@ class MapActivity : AppCompatActivity() {
              Intervall und Priority könnte man noch über apply statt setInterval und setPriority setzen.
              */
             LocationRequest.create().setInterval(1000).setPriority(Priority.PRIORITY_HIGH_ACCURACY),
-            //LocationRequest().setInterval(1000).setPriority(Priority.PRIORITY_HIGH_ACCURACY),
             locationCallBack,
             Looper.myLooper()
         )

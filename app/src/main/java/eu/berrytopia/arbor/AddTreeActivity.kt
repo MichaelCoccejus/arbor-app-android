@@ -45,7 +45,7 @@ class AddTreeActivity : AppCompatActivity() {
         val spinner: Spinner = findViewById(R.id.latinNames)
         val arrayAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, latinNameArray)
         spinner.adapter = arrayAdapter
-        //spinner.setSelection(0)
+        spinner.setSelection(0)
 
         // Funktionalität für die Kamera.
         if (ContextCompat.checkSelfPermission(applicationContext, Manifest.permission.CAMERA)
@@ -73,11 +73,11 @@ class AddTreeActivity : AppCompatActivity() {
 
         val discardBtn: Button = findViewById(R.id.discardTreeButton)
         discardBtn.setOnClickListener {
-            //val intent = Intent(this, AddTreeActivity::class.java)
-            //startActivity(intent)
+            val intent = Intent(this, AddTreeActivity::class.java)
+            startActivity(intent)
         }
-
-        //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -97,9 +97,8 @@ class AddTreeActivity : AppCompatActivity() {
             Log.i("EXIF", "Altitude ${exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE)}")
 
             /*
-            * aktualisieren der TextViews für die Koordinaten
+            * Aktualisieren der TextViews für die Koordinaten
             */
-
             val lat = findViewById<TextView>(R.id.latitudeTextView)
             val lon = findViewById<TextView>(R.id.longitudeTextView)
             val alt = findViewById<TextView>(R.id.altitudeTextView)
@@ -113,7 +112,6 @@ class AddTreeActivity : AppCompatActivity() {
     /*
     * Funktion, die aus der Bitmap ein JPEG macht,  und die URL zurückgibt,
     * damit man mit dem ExifInterface die GPS Daten auslesen kann
-    *
     */
     private fun bitmapToFileURL(photo: Bitmap): URL {
         val wrapper = ContextWrapper(applicationContext)
@@ -137,7 +135,6 @@ class AddTreeActivity : AppCompatActivity() {
 
     /*
     * Funktion die das Foto mit gegebenem Namen in den Dateien abspeichert
-    *
     */
     fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? {
         //create a file to write bitmap data
