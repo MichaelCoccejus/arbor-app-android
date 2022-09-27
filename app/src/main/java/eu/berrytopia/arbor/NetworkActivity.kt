@@ -27,6 +27,7 @@ class NetworkActivity(private var context: Context) {
     private var requestQueue: RequestQueue = Volley.newRequestQueue(context)
     private val gson = Gson()
     private val requestTimeout: Int = 10000
+    private val dummyPwd = listOf("Burkhard", "Coccejus", "Voronkov")
 
     /*
     Wir bewegen uns im selben Context und wechseln nicht (Keine Mitgabe über Intent, sondern erneuter Aufruf).
@@ -36,11 +37,11 @@ class NetworkActivity(private var context: Context) {
 
     /*
     Joke of day 1
-    Gefundener Kommentar unter dem Kampf zwischen Gandalf und dem Balrog in Khazad'dum (anderer 
+    Gefundener Kommentar unter dem Kampf zwischen Gandalf und dem Balrog in Khazad'dum (anderer
     Name für Moria).
 
     Gandalf tells the party to run so he can kill the final boss and get all the XP.
-    Then he shows up next session all leveld up and with new robes and a new staff.
+    Then he shows up next session all leveled up and with new robes and a new staff.
 
     Scumbag Gandalf.
 
@@ -49,26 +50,35 @@ class NetworkActivity(private var context: Context) {
     Joke of day 2
     Central Florida Man Buys 20mm  Electronic Gatling Gun Pulled From Navy Fighter Jet
 
-    Florida man says he has no immediatly plans on what he will be doing with his new acquired 
+    Florida man says he has no immediately plans on what he will be doing with his new acquired
     M61 Vulcan: 250-pound, 6-foot long pneumatically driven, six-barrel, air-cooled, electric
     rotary cannon which fires six thousand 20mm rounds per minute.
      */
 
-    /** TODO: Implementing Login-Function
+    /**
      *  @param userName Übergebener Username vom Login-Screen
      *  @param passWord Übergebener Password vom Login-Screen
      *
      *   Muss überprüft werden, ob man als bereits im System ist und die Daten stimmen.
+     *   Dummy-Daten wurden vorerst übernommen.
+     *
      */
-    fun login(userName: String, passWord: String) {
-        
-        //val test =
+    fun login(userName: String, passWord: String) : Boolean{
+        var success = false
+        val registeredUser = getUsers()
+        for (i in 0 until registeredUser.size) {
+            if (registeredUser[i].nickname == userName) {
+                success = (dummyPwd[i] == passWord)
+                break
+            }
+        }
+        return success
     }
 
     fun getUsers(): MutableList<AborUser> {
         val result: MutableList<AborUser> = mutableListOf()
 
-        url = urlBase + "users"
+        /*url = urlBase + "users"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET,
             url,
@@ -87,7 +97,28 @@ class NetworkActivity(private var context: Context) {
             DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
-        requestQueue.add(jsonArrayRequest)
+        requestQueue.add(jsonArrayRequest)*/
+
+        // Rückgabe von Dummy-Usern
+        val user1 = AborUser()
+        user1.id = 0
+        user1.firstName = "Chantal"
+        user1.lastName = "Burkhard"
+        user1.nickname = "Chantal"
+        result.add(user1)
+        val user2 = AborUser()
+        user2.id = 1
+        user2.firstName = "Michael"
+        user2.lastName = "Coccejus"
+        user2.nickname = "Michael"
+        result.add(user2)
+        val user3 = AborUser()
+        user3.id = 2
+        user3.firstName = "John"
+        user3.lastName = "Voronkov"
+        user3.nickname = "John"
+        result.add(user3)
+
         return result
     }
 
@@ -152,6 +183,10 @@ class NetworkActivity(private var context: Context) {
     }
 
     fun addTree(toAdd: GeoObject): Boolean {
+        /*
+        https://gist.github.com/ycui1/5d25672430e6c014a9ef6b422f82652e
+         */
+
         var successValue = false
 
         val json = gson.toJson(toAdd) // Gson von Google kann das Object zu JSON umwandeln.
@@ -163,16 +198,17 @@ class NetworkActivity(private var context: Context) {
         */
 
         url = urlBase + "objects"
+
         val jsonObjectRequest = JsonObjectRequest(
             Request.Method.POST,
             url,
             JSONObject(json), // Anscheinend ist das der Body, der mitgegeben wird. Funktioniert mit Gson evtl genau so wie mit params Ansatz.
-            { response ->
+            {
                 successValue = true
-                Toast.makeText(context, "Konnte nicht abgespeichert werden.", Toast.LENGTH_SHORT)
+                Toast.makeText(context, "Konnte abgespeichert werden.", Toast.LENGTH_SHORT)
                     .show()
             },
-            { error ->
+            {
                 successValue = false
                 Toast.makeText(context, "Konnte nicht abgespeichert werden.", Toast.LENGTH_SHORT)
                     .show()
@@ -204,7 +240,7 @@ class NetworkActivity(private var context: Context) {
             Request.Method.GET,
             url,
             null,
-            { response ->
+            {
                 val currentEvent = Event()
                 // TODO: Implementation von JSON in das Object currentEvent
                 result.add(currentEvent)

@@ -20,9 +20,9 @@ open class GeoObject() : Serializable {
     lateinit var eventList: List<Event>
     lateinit var time: Timestamp
     /*
-    Für das aktuellste Foto würde man die ganzen Fotos in Events stecken.
-    Aus Gründen der Zeit und Komplexität wird ein festes Bild in das GeoObject gesetzt.
-     */
+      Für das aktuellste Foto würde man die ganzen Fotos in Events stecken.
+      Aus Gründen der Zeit und Komplexität wird ein festes Bild in das GeoObject gesetzt.
+    */
     lateinit var media: Media
 
     fun setTypeTree() {

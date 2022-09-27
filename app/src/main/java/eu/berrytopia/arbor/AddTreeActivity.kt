@@ -67,8 +67,14 @@ class AddTreeActivity : AppCompatActivity() {
         // val sizeEditText: EditText = findViewById(R.id.editTextSize)
         val saveBtn: Button = findViewById(R.id.saveTreeButton)
         saveBtn.setOnClickListener {
+
             newGeoObject.name = nameEditText.text.toString()
-            
+            val lat = findViewById<TextView>(R.id.latitudeTextView)
+            val lon = findViewById<TextView>(R.id.longitudeTextView)
+            val alt = findViewById<TextView>(R.id.altitudeTextView)
+            if (lat.text != "placeholder") {
+
+            }
         }
 
         val discardBtn: Button = findViewById(R.id.discardTreeButton)
@@ -110,7 +116,7 @@ class AddTreeActivity : AppCompatActivity() {
     }
 
     /*
-    * Funktion, die aus der Bitmap ein JPEG macht,  und die URL zurückgibt,
+    * Funktion, die aus der Bitmap ein JPEG macht, und die URL zurückgibt,
     * damit man mit dem ExifInterface die GPS Daten auslesen kann
     */
     private fun bitmapToFileURL(photo: Bitmap): URL {
@@ -140,15 +146,17 @@ class AddTreeActivity : AppCompatActivity() {
         //create a file to write bitmap data
         var file: File? = null
         try {
-            file = File(
+            /*file = File(
                 Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
                     .toString() + File.separator + fileNameToSave
-            )
+            ) */
+            file = File(Environment.DIRECTORY_PICTURES + File.separator + fileNameToSave)
+
             file.createNewFile()
 
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
-            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos) // YOU can also save it in JPEG
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
             val bitmapdata = bos.toByteArray()
 
             //write the bytes in file
