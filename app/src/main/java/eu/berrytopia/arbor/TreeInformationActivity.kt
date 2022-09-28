@@ -6,16 +6,27 @@ import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import android.widget.TextView
 
 class TreeInformationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.tree_information)
+
         val net = NetworkActivity(this)
 
         // Dem Intent wurde im Maintenance-Adapter der Baum als GeoObject übergeben.
         val currentObject = intent.getSerializableExtra("GeoObj") as GeoObject
 
+
+        // Anpassen der TextViews entsprechend dem aktuellen Objekt
+        val name: TextView = findViewById(R.id.namePlaceholder)
+        val latinName: TextView = findViewById(R.id.latinNamePlaceholder)
+        val plantDateInfo: TextView = findViewById(R.id.plantDateInfo)
+
+        name.text =  currentObject.name
+        latinName.text = currentObject.latinName
+        plantDateInfo.text = currentObject.plantDate.toString()
 
         // Behandlung der Events
         val eventListView: RecyclerView = findViewById(R.id.eventRecyclerView)

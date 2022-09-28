@@ -1,6 +1,5 @@
 package eu.berrytopia.arbor
 
-import android.net.Uri
 import kotlin.properties.Delegates
 
 class Media : GeoObject() {

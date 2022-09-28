@@ -2,9 +2,7 @@ package eu.berrytopia.arbor
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.View
 import android.widget.Button
-import android.widget.ImageView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +14,6 @@ class MaintenanceActivity : AppCompatActivity() {
     Die Informationen sollten aus dem GeoObject bezogen werden bzw. Elemente mit der Referenz zu diesem GeoObject
 
      TODO: Layout für die einzelnen Elemente basteln und dem Adapter zur Verfügung stellen.
-     TODO: Funktionalität für die ButtomNavigationBar implementieren.
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,7 +24,7 @@ class MaintenanceActivity : AppCompatActivity() {
         val treePicsList: List<Media> = net.getObjectMedia()
 
         val gridView : RecyclerView = findViewById(R.id.treeGridView)
-        gridView.layoutManager = GridLayoutManager(this, 5)
+        gridView.layoutManager = GridLayoutManager(this, 3)
         gridView.adapter = MaintenanceAdapter(this, mGeoObject, treePicsList)
 
         val verwaltungBut: Button = findViewById(R.id.verwaltungBtn)

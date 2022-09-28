@@ -8,7 +8,7 @@ class Event {
     var id: Long by Delegates.notNull()
     var idOfReference: Long by Delegates.notNull()
     lateinit var typeOfReference: String
-    var relatedUserEvent: Long by Delegates.notNull()
+    lateinit var relatedUserEvent: AborUser
     lateinit var eventName: String
     lateinit var eventType: String
     lateinit var userDescription: String

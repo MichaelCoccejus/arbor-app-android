@@ -102,7 +102,7 @@
         app:layout_constraintTop_toBottomOf="@+id/photoEventBtn" />
 
     <Button
-        android:id="@+id/button3"
+        android:id="@+id/addDocumentBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"

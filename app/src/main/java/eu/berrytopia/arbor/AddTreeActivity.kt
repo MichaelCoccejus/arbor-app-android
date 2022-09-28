@@ -33,13 +33,13 @@ class AddTreeActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)
 
-        //val net = NetworkActivity(this)
+        val net = NetworkActivity(this)
         val newGeoObject = GeoObject()
         newGeoObject.setTypeTree()
         //net.addTree(newGeoObject)
 
         //val latinNameArray: Array<String> = net.getLatinNames()
-        val latinNameArray: Array<String> = arrayOf("Test", "Mushroom", "Mario")
+        val latinNameArray: Array<String> = net.getLatinNames()
 
         // Hier wird aus dem selben Array die Strings bezogen. Es muss noch ein Array der User geben.
         val spinner: Spinner = findViewById(R.id.latinNames)
@@ -64,17 +64,40 @@ class AddTreeActivity : AppCompatActivity() {
         }
 
         val nameEditText: EditText = findViewById(R.id.editTextName)
-        // val sizeEditText: EditText = findViewById(R.id.editTextSize)
+        val editTextDate: EditText = findViewById(R.id.editTextDate)
+        val sizeEditText: EditText = findViewById(R.id.editTextSize)
+
         val saveBtn: Button = findViewById(R.id.saveTreeButton)
         saveBtn.setOnClickListener {
-
+            // Input aus den Feldern ans GeoObject hängen
             newGeoObject.name = nameEditText.text.toString()
-            val lat = findViewById<TextView>(R.id.latitudeTextView)
-            val lon = findViewById<TextView>(R.id.longitudeTextView)
-            val alt = findViewById<TextView>(R.id.altitudeTextView)
-            if (lat.text != "placeholder") {
+            newGeoObject.latinName = spinner.selectedItem.toString()
+            newGeoObject.plantDate = editTextDate.text.toString()
+            newGeoObject.size = sizeEditText.text.toString()
 
+            val lat: TextView = findViewById(R.id.latitudeTextView)
+            val lon: TextView = findViewById(R.id.longitudeTextView)
+            val alt: TextView = findViewById(R.id.altitudeTextView)
+
+            if (imageView.drawable != null) {
+                if (lat.text == "placeholder" || lat.text == null) {
+                    lat.text = kotlin.math.round(Math.random() * 100).toString()
+                }
+                if (lon.text == "placeholder" || lat.text == null) {
+                    lon.text = kotlin.math.round(Math.random() * 100).toString()
+                }
+                if (alt.text == "placeholder" || lat.text == null) {
+                    alt.text = kotlin.math.round(Math.random() * 100).toString()
+                }
+                val latitude: Double = lat.text.toString().toDouble()
+                val longitude: Double = lon.text.toString().toDouble()
+                val altitude: Long = alt.text.toString().toLong()
+                val objectGpsPosition = GpsPosition(latitude, longitude, altitude)
+                net.addGps(objectGpsPosition)
+                newGeoObject.position = objectGpsPosition
             }
+            newGeoObject.relatedUser = net.getEditor()
+            net.addTree(newGeoObject)
         }
 
         val discardBtn: Button = findViewById(R.id.discardTreeButton)
@@ -82,7 +105,6 @@ class AddTreeActivity : AppCompatActivity() {
             val intent = Intent(this, AddTreeActivity::class.java)
             startActivity(intent)
         }
-        
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
 
@@ -102,12 +124,10 @@ class AddTreeActivity : AppCompatActivity() {
             Log.i("EXIF", "Longitude ${exif.getAttribute(ExifInterface.TAG_GPS_DEST_LONGITUDE)}")
             Log.i("EXIF", "Altitude ${exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE)}")
 
-            /*
-            * Aktualisieren der TextViews für die Koordinaten
-            */
-            val lat = findViewById<TextView>(R.id.latitudeTextView)
-            val lon = findViewById<TextView>(R.id.longitudeTextView)
-            val alt = findViewById<TextView>(R.id.altitudeTextView)
+            ///Aktualisieren der TextViews für die Koordinaten
+            val lat: TextView = findViewById(R.id.latitudeTextView)
+            val lon: TextView = findViewById(R.id.longitudeTextView)
+            val alt: TextView = findViewById(R.id.altitudeTextView)
 
             lat.text = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
             lon.text = exif.getAttribute(ExifInterface.TAG_GPS_DEST_LONGITUDE)
@@ -139,9 +159,7 @@ class AddTreeActivity : AppCompatActivity() {
         return file.toURI().toURL()
     }
 
-    /*
-    * Funktion die das Foto mit gegebenem Namen in den Dateien abspeichert
-    */
+    // Funktion die das Foto mit gegebenem Namen in den Dateien abspeichert
     fun bitmapToFile(bitmap: Bitmap, fileNameToSave: String): File? {
         //create a file to write bitmap data
         var file: File? = null
@@ -151,14 +169,11 @@ class AddTreeActivity : AppCompatActivity() {
                     .toString() + File.separator + fileNameToSave
             ) */
             file = File(Environment.DIRECTORY_PICTURES + File.separator + fileNameToSave)
-
             file.createNewFile()
-
             //Convert bitmap to byte array
             val bos = ByteArrayOutputStream()
             bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos)
             val bitmapdata = bos.toByteArray()
-
             //write the bytes in file
             val fos = FileOutputStream(file)
             fos.write(bitmapdata)

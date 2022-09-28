@@ -46,5 +46,5 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-android:6.1.14'
     implementation 'androidx.appcompat:appcompat:1.5.1'
     implementation 'com.google.code.gson:gson:2.8.9'
-    implementation 'com.github.hardillb:MultiPartVolley:0.0.3'
+    //implementation 'com.github.hardillb:MultiPartVolley:0.0.3'
 }
