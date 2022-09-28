@@ -1,9 +1,6 @@
 package eu.berrytopia.arbor
 
 import android.content.Context
-import com.android.volley.RequestQueue
-import com.android.volley.toolbox.Volley
-import com.google.gson.Gson
 
 /*
 Joke of day 1
@@ -45,7 +42,7 @@ class NetworkActivity(private var context: Context) {
      *   Der Konstruktor wird im neuen Context aufgerufen.
      *   Der Context wird für die Toast benötigt ( Noch keine Ahnung, ob es klappt ).
      *private val urlBase: String =
-        "arbor.berrytopia.eu:8080/api/v1/" // Die Adresse ändert sich nicht. Lediglich was angehängt wird.
+    "arbor.berrytopia.eu:8080/api/v1/" // Die Adresse ändert sich nicht. Lediglich was angehängt wird.
     private lateinit var url: String
     private var requestQueue: RequestQueue = Volley.newRequestQueue(context)
     private val requestTimeout: Int = 10000
@@ -57,28 +54,36 @@ class NetworkActivity(private var context: Context) {
     private val tasks: MutableList<Task> = mutableListOf()
     private val gpsPositions: MutableList<GpsPosition> = mutableListOf()
     private lateinit var loggedIn: AborUser
+    private val latinNames = arrayOf(
+        "Corylus colurna",
+        "Fraxinus excelsior",
+        "Cercis siliquastrum"
+    ) // Baumhasel, Gemeine Esche, Judasbaum
 
     // Sollte die persistenten Daten aus der JSON auslesen.
     init {
-       
-
-        val user1 = AborUser()
-        user1.id = 0
+        val user1 =
+            AborUser("Chantal", "Burkhard", "Chantal", "Burkhard", "chantal.burkhard@mail.de")
+        /*user1.id = 0
         user1.firstName = "Chantal"
         user1.lastName = "Burkhard"
         user1.nickname = "Chantal"
+        user1.email = "chantal.burkhard@mail.de"*/
         dummyUser.add(user1)
-        val user2 = AborUser()
-        user2.id = 1
+        val user2 =
+            AborUser("Michael", "Coccejus", "Michael", "Coccejus", "michael.coccejus@mail.de")
+        /*user2.id = 1
         user2.firstName = "Michael"
         user2.lastName = "Coccejus"
         user2.nickname = "Michael"
+        user2.email = "michael.coccejus@mail.de"*/
         dummyUser.add(user2)
-        val user3 = AborUser()
-        user3.id = 2
+        val user3 = AborUser("John", "Voronkov", "John", "Voronkov", "john.voronkov@mail.de")
+        /*user3.id = 2
         user3.firstName = "John"
         user3.lastName = "Voronkov"
         user3.nickname = "John"
+        user3.email = "john.voronkov@mail.de"*/
         dummyUser.add(user3)
     }
 
@@ -95,7 +100,7 @@ class NetworkActivity(private var context: Context) {
         val registeredUser = getUsers()
         for (i in 0 until registeredUser.size) {
             if (registeredUser[i].nickname == userName) {
-                if (dummyPwd[i] == passWord) {
+                if (registeredUser[i].password == passWord) {
                     success = true
                     loggedIn = registeredUser[i]
                     break
@@ -258,7 +263,6 @@ class NetworkActivity(private var context: Context) {
     null,
     {
     val currentEvent = Event()
-    // TODO: Implementation von JSON in das Object currentEvent
     result.add(currentEvent)
     },
     {
@@ -346,7 +350,7 @@ class NetworkActivity(private var context: Context) {
     }
 
     fun getLatinNames(): Array<String> {
-        return emptyArray()
+        return latinNames
     }
 
 /*

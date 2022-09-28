@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <item android:id="@+id/menu_main_setting"
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:id="@+id/menu_main_profil"
         android:actionLayout="@layout/map_activity"
-        android:title="@string/setting"/>
+        android:title="@string/profil"/>
     <item android:id="@+id/menu_main_logout"
         android:actionLayout="@layout/map_activity"
         android:title="@string/logout"/>

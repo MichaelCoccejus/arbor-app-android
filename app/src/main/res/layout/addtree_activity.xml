@@ -194,7 +194,7 @@
                 android:autofillHints=""
                 android:ems="15"
                 android:hint="@string/sizeInput"
-                android:inputType="number" />
+                android:inputType="numberDecimal" />
         </TableRow>
     </TableLayout>
 

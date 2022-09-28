@@ -37,8 +37,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MaintenanceActivity" />
-        <activity android:name=".MapActivity" />
+        <activity android:name=".MaintenanceActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".MapActivity"
+            android:parentActivityName=".MainActivity"/>
+        <activity android:name=".ProfilActivity"/>
         <activity android:name=".TreeInformationActivity" />
 
     </application>

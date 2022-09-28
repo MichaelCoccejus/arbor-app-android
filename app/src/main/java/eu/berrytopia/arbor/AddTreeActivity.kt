@@ -6,7 +6,10 @@ import android.content.ContextWrapper
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.drawable.BitmapDrawable
+import android.graphics.drawable.Drawable
 import android.media.ExifInterface
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -15,6 +18,7 @@ import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.core.graphics.drawable.toBitmap
 import java.io.*
 import java.net.URL
 import java.util.*
@@ -98,6 +102,7 @@ class AddTreeActivity : AppCompatActivity() {
             }
             newGeoObject.relatedUser = net.getEditor()
             net.addTree(newGeoObject)
+            finishAffinity()
         }
 
         val discardBtn: Button = findViewById(R.id.discardTreeButton)
@@ -114,14 +119,14 @@ class AddTreeActivity : AppCompatActivity() {
             // Fotos in ImageView setzen.
             val photo: Bitmap = data?.extras?.get("data") as Bitmap
             imageView.setImageBitmap(photo)
-
+            val imageUri = getImageUri(this, photo)
             val pic = bitmapToFileURL(photo)
             bitmapToFile(photo, "testPic.jpg")
 
             // Verwendung des ExifInterface für die Koodinaten des Fotos
             val exif = ExifInterface(pic.openStream())
             Log.i("EXIF", "Latitude ${exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)}")
-            Log.i("EXIF", "Longitude ${exif.getAttribute(ExifInterface.TAG_GPS_DEST_LONGITUDE)}")
+            Log.i("EXIF", "Longitude ${exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)}")
             Log.i("EXIF", "Altitude ${exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE)}")
 
             ///Aktualisieren der TextViews für die Koordinaten
@@ -130,9 +135,18 @@ class AddTreeActivity : AppCompatActivity() {
             val alt: TextView = findViewById(R.id.altitudeTextView)
 
             lat.text = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
-            lon.text = exif.getAttribute(ExifInterface.TAG_GPS_DEST_LONGITUDE)
+            lon.text = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
             alt.text = exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE)
+
+            val drawable: Drawable = BitmapDrawable(photo)
         }
+    }
+
+    fun getImageUri(context: Context, bitmap: Bitmap) : Uri {
+        val bytes = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes)
+        val path: String = MediaStore.Images.Media.insertImage(context.contentResolver, bitmap, "Title", null)
+        return Uri.parse(path)
     }
 
     /*

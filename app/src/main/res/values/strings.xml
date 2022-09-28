@@ -4,7 +4,6 @@
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="contentDescr">Add tree</string>
-    <string name="setting">Setting</string>
     <string name="logout">Logout</string>
     <string name="orga">Verwaltung Bäume"</string>
     <string name="mapButtonText">Kartenansicht</string>
@@ -29,10 +28,9 @@
     <string name="user">User</string>
     <string name="taskStart">Aufgabenbeginn</string>
     <string name="taskEnd">Aufgabenende</string>
-
-    <string-array name="testArray">
-        <item>Latinum ist da.</item>
-        <item>Metro Exodus</item>
-        <item>Witcher 3</item>
-    </string-array>
+    <string name="profil">Profil</string>
+    <string name="firstName">Vorname</string>
+    <string name="lastName">Nachname</string>
+    <string name="nickName">Nickname</string>
+    <string name="email">Email</string>
 </resources>

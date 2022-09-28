@@ -4,11 +4,13 @@ import android.Manifest
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
 import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 
 class MainActivity : AppCompatActivity() {
@@ -17,7 +19,7 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //val net = NetworkActivity(this) // Wird für die Bearbeitung über Netzwerk benötigt.
+        val net = NetworkActivity(this) // Wird für die Bearbeitung über Netzwerk benötigt.
 
         if (!Environment.isExternalStorageManager()) {
             val intent = Intent()
@@ -45,8 +47,15 @@ class MainActivity : AppCompatActivity() {
 
         val buttonClick = findViewById<Button>(R.id.loginBtn)
         buttonClick.setOnClickListener {
-            val intent = Intent(this, MapActivity::class.java)
-            startActivity(intent)
+            val userNameInput: EditText = findViewById(R.id.userNameInput)
+            val passWordInput: EditText = findViewById(R.id.passwordInput)
+            if (net.login(userNameInput.text.toString(), passWordInput.text.toString())) {
+                val intent = Intent(this, MapActivity::class.java)
+                val userData: AborUser = net.getEditor()
+                intent.putExtra("USER", userData)
+                startActivity(intent)
+            } else
+                Toast.makeText(this, "Username/Password ist falsch.", Toast.LENGTH_SHORT).show()
         }
     }
 }

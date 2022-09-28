@@ -6,8 +6,11 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
+import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.NavUtils
 import com.google.android.gms.location.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
@@ -17,15 +20,51 @@ import org.osmdroid.views.MapView
 
 
 class MapActivity : AppCompatActivity() {
+    private lateinit var loggedIn: AborUser
+
+
     // Für das Menü in der Toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_options, menu)
         return true
     }
 
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            R.id.menu_main_logout -> {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                return true
+            }
+            R.id.menu_main_profil -> {
+                val intent = Intent(applicationContext,  ProfilActivity::class.java)
+                intent.putExtra("USER", loggedIn)
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    /*override fun onMenuItemClick(menuItem: MenuItem): Boolean {
+        when (menuItem.itemId) {
+            R.id.menu_main_logout -> {
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                return true
+            }
+            R.id.menu_main_profil -> {
+                val intent = Intent(applicationContext,  ProfilActivity::class.java)
+                intent.putExtra("USER", loggedIn)
+                startActivity(intent)
+                return true
+            }
+        }
+        return super.onMenuItemSelected(menuItem.itemId, menuItem)
+    }*/
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity)
+        loggedIn = intent.extras?.get("USER") as AborUser
 
         // Nur zum Erstellen von Bäumen. Plantage werden zeitlich nicht reichen.
         val floatBut: FloatingActionButton = findViewById(R.id.floatingActionButton)

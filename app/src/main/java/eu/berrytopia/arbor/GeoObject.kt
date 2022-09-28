@@ -4,7 +4,7 @@ import java.io.Serializable
 import java.util.*
 import kotlin.properties.Delegates
 
-open class GeoObject() : Serializable {
+open class GeoObject : Serializable {
     var idOfObject: Long by Delegates.notNull() // Eigene ID
     lateinit var typeOfObject: String // Eigener Typ
     //var idOfParent: Long by Delegates.notNull() // ID der Plantage
