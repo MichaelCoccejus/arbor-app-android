@@ -35,18 +35,32 @@ class NetworkActivity(private var context: Context) {
      *   Network-Klasse sollte die Funktionalitäten des Clients im Netz abdecken.
      *   Dazu zählen Login-Prozess, Datenabruf vom Server und Datenspeicherung zum Server.
      *
-     *   Es wird nur JsonArrayRequest abgeschickt, da der Json bei einem JsonObjectRequest eine Json mit Json-Objekten ohne Keys zurückgibt
-     *   und die Bearbeitung der Json-Objekten erschwert. Mit JsonArrayRequest wird ein Array der Json-Objekte als response erwartet.
+     *   Es wird nur JsonArrayRequest abgeschickt, da der Json bei einem JsonObjectRequest eine
+     *   Json mit Json-Objekten ohne Keys zurückgibt und die Bearbeitung der Json-Objekten
+     *   erschwert. Mit JsonArrayRequest wird ein Array der Json-Objekte als response erwartet.
      *
-     *   Wir bewegen uns im selben Context und wechseln nicht (Keine Mitgabe über Intent, sondern erneuter Aufruf).
-     *   Der Konstruktor wird im neuen Context aufgerufen.
-     *   Der Context wird für die Toast benötigt ( Noch keine Ahnung, ob es klappt ).
-     *private val urlBase: String =
-    "arbor.berrytopia.eu:8080/api/v1/" // Die Adresse ändert sich nicht. Lediglich was angehängt wird.
-    private lateinit var url: String
-    private var requestQueue: RequestQueue = Volley.newRequestQueue(context)
-    private val requestTimeout: Int = 10000
-    private val gson = Gson()*/
+     *   Wir bewegen uns im selben Context und wechseln nicht (Keine Mitgabe über Intent,
+     *   sondern erneuter Aufruf). Der Konstruktor wird im neuen Context aufgerufen. Der Context
+     *   wird für die Toast benötigt.
+     *
+     *   Wegen der Komplexizität der Struktur reicht die Zeit nicht die Objekte und Funktionen an
+     *   das Backend anzupassen. Die Request können aus dem Grund nicht getestet werden.
+     *   Insbesondere wenn der Emulator Probleme bei den Foto-Dateien erzeugt.
+     *
+     *   Die meisten Request über Volley sind zwar da und auskommentiert. Einige Requests sind
+     *   nicht vollständig.
+     *
+     *   Die Adresse für die Request ändert sich nicht. Lediglich wird der gewünschte Abschnitt der
+     *   Variable url angehängt (urlBase + Anhägsel).
+     *   private val urlBase: String = "arbor.berrytopia.eu:8080/api/v1/"
+     *   private lateinit var url: String
+     *
+     *   private var requestQueue: RequestQueue = Volley.newRequestQueue(context)
+     *   private val requestTimeout: Int = 10000
+     *
+     *   Gson wird für die Übersetzung Json <-> Objekt
+     *   private val gson = Gson()
+     */
     private val dummyUser = mutableListOf<AborUser>()
     private val geoObjects: MutableList<GeoObject> = mutableListOf()
     private val events: MutableList<Event> = mutableListOf()
@@ -111,7 +125,8 @@ class NetworkActivity(private var context: Context) {
     }
 
 
-    /*fun getUsers(): MutableList<AborUser> {
+    /*
+    fun getUsers(): MutableList<AborUser> {
         val result: MutableList<AborUser> = mutableListOf()
 
         url = urlBase + "users"
@@ -156,9 +171,11 @@ class NetworkActivity(private var context: Context) {
                 return currentTree
         }
         return null
-    }*/
+    }
+     */
 
-    /*fun getTrees(): List<GeoObject> {
+    /*
+    fun getTrees(): List<GeoObject> {
         val result: MutableList<GeoObject> = mutableListOf()
 
         url = urlBase + "objects"
@@ -222,7 +239,8 @@ class NetworkActivity(private var context: Context) {
         return geoObjects
     }
 
-    /* fun addTree(toAdd: GeoObject): Boolean {
+    /*
+    fun addTree(toAdd: GeoObject): Boolean {
        https://gist.github.com/ycui1/5d25672430e6c014a9ef6b422f82652e
        var successValue = false
        val json = gson.toJson(toAdd) // Gson von Google kann das Object zu JSON umwandeln.
