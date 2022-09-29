@@ -32,7 +32,7 @@ class MaintenanceAdapter(
             nameTextView = itemView.findViewById(R.id.treeGridName)
         }
 
-        // Das ist der OnClickListener für die Elemente.
+        // Das ist der OnClickListener für die Elemente. Funktioniert nicht.
         override fun onClick(p0: View?) {
             val intent = Intent()
             val currentPosition = adapterPosition
