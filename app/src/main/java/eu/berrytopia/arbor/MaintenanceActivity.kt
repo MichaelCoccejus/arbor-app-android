@@ -10,11 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 
 class MaintenanceActivity : AppCompatActivity() {
     /**
-    Die Activity ist zuständig für das Layout maintenance_activity.
-    Es wird MaintenanceActivity benötigt um die Ansicht bzw Anordnung der Elemente in ein Grid ähnliches Muster zu bekommen.
-    Die Informationen sollten aus dem GeoObject bezogen werden bzw. Elemente mit der Referenz zu diesem GeoObject
+     * Für das Menü in der Toolbar.
      */
-    // Für das Menü in der Toolbar
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.toolbar_options, menu)
         return true
@@ -24,10 +21,16 @@ class MaintenanceActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.maintenance_activity)
 
+        // Beziehen der Informationen
         val net = NetworkActivity(this)
         val mGeoObject: List<GeoObject> = net.getTrees()
         val treePicsList: List<Media> = net.getObjectMedia()
 
+        /**
+         * Einstellungen der View
+         * Über den GirdLayoutManager wird die View in ein Gridraster aufgebaut.
+         * Der Adapter wurde selbsterstellt.
+         */
         val gridView: RecyclerView = findViewById(R.id.treeGridView)
         gridView.layoutManager = GridLayoutManager(this, 3)
         gridView.adapter = MaintenanceAdapter(this, mGeoObject, treePicsList)

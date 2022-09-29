@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.net.toUri
 import androidx.recyclerview.widget.RecyclerView
 
@@ -36,7 +37,7 @@ class MaintenanceAdapter(
             val intent = Intent()
             val currentPosition = adapterPosition
             intent.putExtra("GeoObj", mGeoObject[currentPosition])
-            ContextCompat.startActivity(this.itemView.context, intent, null)
+            startActivity(this.itemView.context, intent, null)
         }
     }
 
@@ -55,7 +56,10 @@ class MaintenanceAdapter(
     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.nameTextView.text = mGeoObject[position].name
-        holder.treePic.setImageURI(treePicList[position].fullUri.toUri())
+        if (position == 0)
+            holder.treePic.setImageResource(R.drawable.baum1)
+        if (position == 1)
+            holder.treePic.setImageResource(R.drawable.baum2)
     }
 
     // Selbsterklärend.

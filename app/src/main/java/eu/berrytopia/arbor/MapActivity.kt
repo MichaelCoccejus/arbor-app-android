@@ -8,9 +8,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
-import android.widget.Toolbar
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.NavUtils
 import com.google.android.gms.location.*
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import org.osmdroid.config.Configuration
@@ -32,11 +30,13 @@ class MapActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_main_logout -> {
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                //supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                // finishAffinity()
+                finish()
                 return true
             }
             R.id.menu_main_profil -> {
-                val intent = Intent(applicationContext,  ProfilActivity::class.java)
+                val intent = Intent(applicationContext, ProfilActivity::class.java)
                 intent.putExtra("USER", loggedIn)
                 startActivity(intent)
                 return true
@@ -69,19 +69,20 @@ class MapActivity : AppCompatActivity() {
         // Nur zum Erstellen von Bäumen. Plantage werden zeitlich nicht reichen.
         val floatBut: FloatingActionButton = findViewById(R.id.floatingActionButton)
         floatBut.setOnClickListener {
-                val intent = Intent(this, AddTreeActivity::class.java)
-                startActivity(intent)
+            val intent = Intent(this, AddTreeActivity::class.java)
+            intent.putExtra("USER", loggedIn)
+            startActivity(intent)
         }
 
         // Eine vereinfachte Version von BottomNavigtionBar
         val verwaltungBtn: Button = findViewById(R.id.verwaltungBtn)
-        verwaltungBtn.setOnClickListener{
+        verwaltungBtn.setOnClickListener {
             val intent = Intent(this, MaintenanceActivity::class.java)
             startActivity(intent)
         }
 
         val mapBut: Button = findViewById(R.id.mapBtn)
-        mapBut.setOnClickListener{
+        mapBut.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
             startActivity(intent)
         }

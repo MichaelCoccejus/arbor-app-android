@@ -10,4 +10,5 @@ class Media : GeoObject() {
     var idOfReference: Long by Delegates.notNull()
     lateinit var smallUri: String
     lateinit var fullUri: String
+    var pic by Delegates.notNull<Int>()
 }

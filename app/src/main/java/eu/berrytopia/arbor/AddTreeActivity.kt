@@ -26,6 +26,7 @@ import java.util.*
 class AddTreeActivity : AppCompatActivity() {
     var cameraRequest = 1888
     lateinit var imageView: ImageView
+    private lateinit var loggedIn: AborUser
 
     /**
      * Die Ansicht (addtree_activity) dient zum Erstellen neuer Bäume.
@@ -36,6 +37,7 @@ class AddTreeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.addtree_activity)
+        loggedIn = intent.extras?.get("USER") as AborUser
 
         val net = NetworkActivity(this)
         val newGeoObject = GeoObject()
@@ -84,23 +86,25 @@ class AddTreeActivity : AppCompatActivity() {
             val alt: TextView = findViewById(R.id.altitudeTextView)
 
             if (imageView.drawable != null) {
+                val latitude: Double = kotlin.math.round(Math.random() * 100)
+                val longitude: Double = kotlin.math.round(Math.random() * 100)
+                val altitude: Long = kotlin.math.round(Math.random() * 100).toLong()
                 if (lat.text == "placeholder" || lat.text == null) {
-                    lat.text = kotlin.math.round(Math.random() * 100).toString()
+                    lat.text = latitude.toString()
                 }
                 if (lon.text == "placeholder" || lat.text == null) {
-                    lon.text = kotlin.math.round(Math.random() * 100).toString()
+                    lon.text = longitude.toString()
                 }
                 if (alt.text == "placeholder" || lat.text == null) {
-                    alt.text = kotlin.math.round(Math.random() * 100).toString()
+                    alt.text = altitude.toString()
                 }
-                val latitude: Double = lat.text.toString().toDouble()
-                val longitude: Double = lon.text.toString().toDouble()
-                val altitude: Long = alt.text.toString().toLong()
+
                 val objectGpsPosition = GpsPosition(latitude, longitude, altitude)
                 net.addGps(objectGpsPosition)
                 newGeoObject.position = objectGpsPosition
             }
-            newGeoObject.relatedUser = net.getEditor()
+            newGeoObject.relatedUser = loggedIn// net.getEditor()EXIF
+
             net.addTree(newGeoObject)
             finishAffinity()
         }
@@ -137,8 +141,6 @@ class AddTreeActivity : AppCompatActivity() {
             lat.text = exif.getAttribute(ExifInterface.TAG_GPS_LATITUDE)
             lon.text = exif.getAttribute(ExifInterface.TAG_GPS_LONGITUDE)
             alt.text = exif.getAttribute(ExifInterface.TAG_GPS_ALTITUDE)
-
-            val drawable: Drawable = BitmapDrawable(photo)
         }
     }
 

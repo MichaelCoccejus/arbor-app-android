@@ -18,7 +18,6 @@ class TreeInformationActivity : AppCompatActivity() {
         // Dem Intent wurde im Maintenance-Adapter der Baum als GeoObject übergeben.
         val currentObject = intent.getSerializableExtra("GeoObj") as GeoObject
 
-
         // Anpassen der TextViews entsprechend dem aktuellen Objekt
         val name: TextView = findViewById(R.id.namePlaceholder)
         val latinName: TextView = findViewById(R.id.latinNamePlaceholder)

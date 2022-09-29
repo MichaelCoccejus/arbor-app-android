@@ -48,11 +48,11 @@ class NetworkActivity(private var context: Context) {
     private val requestTimeout: Int = 10000
     private val gson = Gson()*/
     private val dummyUser = mutableListOf<AborUser>()
-    private val dummyPwd = listOf("Burkhard", "Coccejus", "Voronkov")
     private val geoObjects: MutableList<GeoObject> = mutableListOf()
     private val events: MutableList<Event> = mutableListOf()
     private val tasks: MutableList<Task> = mutableListOf()
     private val gpsPositions: MutableList<GpsPosition> = mutableListOf()
+    private val photos: MutableList<Media> = mutableListOf()
     private lateinit var loggedIn: AborUser
     private val latinNames = arrayOf(
         "Corylus colurna",
@@ -110,6 +110,7 @@ class NetworkActivity(private var context: Context) {
         return success
     }
 
+
     /*fun getUsers(): MutableList<AborUser> {
         val result: MutableList<AborUser> = mutableListOf()
 
@@ -147,7 +148,7 @@ class NetworkActivity(private var context: Context) {
     /**
      *  Die Rückgabe muss noch hinzugefügt werden.
      *  Die Funktion Baum gibt mit einem Geo-Punkte zurück.
-     */
+
     fun getTree(id: Long): GeoObject? {
         val trees = filteringTrees()
         for (currentTree in trees) {
@@ -155,7 +156,7 @@ class NetworkActivity(private var context: Context) {
                 return currentTree
         }
         return null
-    }
+    }*/
 
     /*fun getTrees(): List<GeoObject> {
         val result: MutableList<GeoObject> = mutableListOf()
@@ -197,19 +198,31 @@ class NetworkActivity(private var context: Context) {
      }
     */
     fun getTrees(): List<GeoObject> {
-        return filteringTrees()
+
+        val geoObject1 = GeoObject()
+        geoObject1.idOfObject = 0
+        geoObject1.name = "Baumbart"
+        geoObject1.latinName = "Corylus colurna"
+        geoObject1.plantDate = "12/09/2022"
+        val mediaItem = Media()
+        mediaItem.id = 0
+        mediaItem.pic = R.drawable.baum1
+        geoObject1.media = mediaItem
+        val geoObject2 = GeoObject()
+        geoObject2.idOfObject = 1
+        geoObject2.name = "Entenhausen"
+        geoObject2.latinName = "Fraxinus excelsior"
+        geoObject2.plantDate = "28/10/2021"
+        val mediaItem2 = Media()
+        mediaItem.id = 0
+        mediaItem.pic = R.drawable.baum2
+        geoObject2.media = mediaItem2
+        geoObjects.add(geoObject1)
+        geoObjects.add(geoObject2)
+        return geoObjects
     }
 
-    private fun filteringTrees(): List<GeoObject> {
-        val result = mutableListOf<GeoObject>()
-        for (i in geoObjects.indices) {
-            if (geoObjects[i].typeOfObject == "Baum")
-                result.add(geoObjects[i])
-        }
-        return result
-    }
-
-    /*fun addTree(toAdd: GeoObject): Boolean {
+    /* fun addTree(toAdd: GeoObject): Boolean {
        https://gist.github.com/ycui1/5d25672430e6c014a9ef6b422f82652e
        var successValue = false
        val json = gson.toJson(toAdd) // Gson von Google kann das Object zu JSON umwandeln.
@@ -237,7 +250,7 @@ class NetworkActivity(private var context: Context) {
        requestQueue.add(jsonObjectRequest)
        return successValue
     }
-       */
+    */
     fun addTree(toAdd: GeoObject) {
         toAdd.idOfObject = (geoObjects.size + 1).toLong()
         geoObjects.add(toAdd)
@@ -245,7 +258,10 @@ class NetworkActivity(private var context: Context) {
     }
 
     fun getObjectMedia(): List<Media> {
-        return emptyList()
+        val result = mutableListOf<Media>()
+        for (tree in geoObjects)
+            result.add(tree.media)
+        return result
     }
 
     /**
@@ -316,7 +332,7 @@ class NetworkActivity(private var context: Context) {
     null,
     { response ->
     val currentTask = Task()
-    // TODO: Implementation von JSON in das Object currentEvent
+
     result.add(currentTask)
     },
     {
