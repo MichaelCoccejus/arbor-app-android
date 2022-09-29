@@ -78,12 +78,14 @@ class MapActivity : AppCompatActivity() {
         val verwaltungBtn: Button = findViewById(R.id.verwaltungBtn)
         verwaltungBtn.setOnClickListener {
             val intent = Intent(this, MaintenanceActivity::class.java)
+            intent.putExtra("USER", loggedIn)
             startActivity(intent)
         }
 
         val mapBut: Button = findViewById(R.id.mapBtn)
         mapBut.setOnClickListener {
             val intent = Intent(this, MapActivity::class.java)
+            intent.putExtra("USER", loggedIn)
             startActivity(intent)
         }
 
@@ -166,6 +168,4 @@ class MapActivity : AppCompatActivity() {
         map!!.controller.setCenter(myPos)
         map!!.controller.setZoom(19.0)
     }
-
-
 }
