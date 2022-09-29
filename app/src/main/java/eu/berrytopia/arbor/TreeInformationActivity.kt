@@ -25,7 +25,7 @@ class TreeInformationActivity : AppCompatActivity() {
 
         name.text =  currentObject.name
         latinName.text = currentObject.latinName
-        plantDateInfo.text = currentObject.plantDate.toString()
+        plantDateInfo.text = currentObject.plantDate
 
         // Behandlung der Events
         val eventListView: RecyclerView = findViewById(R.id.eventRecyclerView)

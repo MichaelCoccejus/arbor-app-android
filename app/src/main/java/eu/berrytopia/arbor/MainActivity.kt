@@ -20,7 +20,9 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         val net = NetworkActivity(this) // Wird für die Bearbeitung über Netzwerk benötigt.
+        // Durch ständig neu aufgerufene NetworkAcitivty gehen die Daten dort verloren. Ein Problembehandlung, die mehr Zeit bedarf.
 
+        // Überprüfung der Permissions.
         if (!Environment.isExternalStorageManager()) {
             val intent = Intent()
             intent.action = Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION
@@ -28,7 +30,6 @@ class MainActivity : AppCompatActivity() {
             intent.data = uri
             startActivity(intent)
         }
-
         if (ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -45,17 +46,18 @@ class MainActivity : AppCompatActivity() {
             ActivityCompat.requestPermissions(this, gpsPermissions, RECORD_REQUEST_CODE)
         }
 
+        // Login Funktionalität
         val buttonClick = findViewById<Button>(R.id.loginBtn)
         buttonClick.setOnClickListener {
             val userNameInput: EditText = findViewById(R.id.userNameInput)
             val passWordInput: EditText = findViewById(R.id.passwordInput)
-            if (net.login(userNameInput.text.toString(), passWordInput.text.toString())) {
+            if (net.login(userNameInput.text.toString(), passWordInput.text.toString())) { // User zur Übergabe wird hier gesetzt.
                 val intent = Intent(this, MapActivity::class.java)
                 val userData: AborUser = net.getEditor()
                 intent.putExtra("USER", userData)
                 startActivity(intent)
             } else
-                Toast.makeText(this, "Username/Password ist falsch.", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Username/Password ist falsch.", Toast.LENGTH_SHORT).show() // Zeigt komischerweise nicht an.
         }
     }
 }

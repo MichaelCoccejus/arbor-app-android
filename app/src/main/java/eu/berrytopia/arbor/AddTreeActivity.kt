@@ -104,7 +104,6 @@ class AddTreeActivity : AppCompatActivity() {
                 newGeoObject.position = objectGpsPosition
             }
             newGeoObject.relatedUser = loggedIn// net.getEditor()EXIF
-
             net.addTree(newGeoObject)
             finishAffinity()
         }

@@ -19,6 +19,13 @@ class MaintenanceActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * @param item Der geklickte Menupunkt wird übergeben.
+     *
+     * Es soll nach je nach Menüpunkt eine Aktion druchgeführt werden.
+     * Jeder dieser Menüpunkte hat eine ID.
+     * Die Menüpunkte werden als Menü unter toolbar_options.xml aufgelistet.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_main_logout -> {

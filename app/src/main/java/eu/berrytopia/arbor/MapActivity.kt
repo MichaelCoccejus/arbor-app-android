@@ -27,11 +27,16 @@ class MapActivity : AppCompatActivity() {
         return true
     }
 
+    /**
+     * @param item Der geklickte Menupunkt wird übergeben.
+     *
+     * Es soll nach je nach Menüpunkt eine Aktion druchgeführt werden.
+     * Jeder dieser Menüpunkte hat eine ID.
+     * Die Menüpunkte werden als Menü unter toolbar_options.xml aufgelistet.
+     */
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_main_logout -> {
-                //supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                // finishAffinity()
                 finish()
                 return true
             }
@@ -45,28 +50,19 @@ class MapActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    /*override fun onMenuItemClick(menuItem: MenuItem): Boolean {
-        when (menuItem.itemId) {
-            R.id.menu_main_logout -> {
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                return true
-            }
-            R.id.menu_main_profil -> {
-                val intent = Intent(applicationContext,  ProfilActivity::class.java)
-                intent.putExtra("USER", loggedIn)
-                startActivity(intent)
-                return true
-            }
-        }
-        return super.onMenuItemSelected(menuItem.itemId, menuItem)
-    }*/
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.map_activity)
+        /**
+         * Übergebene Daten/Extras nur in onCreate holen (Beachte Activity life cycle).
+         */
         loggedIn = intent.extras?.get("USER") as AborUser
 
-        // Nur zum Erstellen von Bäumen. Plantage werden zeitlich nicht reichen.
+        /**
+         * Nur zum Erstellen von Bäumen. Plantage werden zeitlich nicht reichen.
+         * Für Plantage müsste man die AddTreeActivity und die Ansichten komplett ändern um ein
+         * GeoObject vom Typ Plantage zu erstellen.
+         */
         val floatBut: FloatingActionButton = findViewById(R.id.floatingActionButton)
         floatBut.setOnClickListener {
             val intent = Intent(this, AddTreeActivity::class.java)
@@ -94,9 +90,9 @@ class MapActivity : AppCompatActivity() {
         initGps()
     }
 
-    /*
-    Geofence Plantage
-    Die Fence sollte am Ende geladen werden.
+    /**
+     * Geofence Plantage
+     * Die Fence sollte am Ende über NetworkActivity geladen werden.
      */
     val fence =
         listOf(
