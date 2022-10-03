@@ -1,6 +1,17 @@
 package eu.berrytopia.arbor
 
 import android.content.Context
+import android.widget.Toast
+import com.android.volley.DefaultRetryPolicy
+import com.android.volley.Request
+import com.android.volley.RequestQueue
+import com.android.volley.toolbox.JsonArrayRequest
+import com.android.volley.toolbox.JsonObjectRequest
+import com.android.volley.toolbox.Volley
+import com.google.gson.Gson
+import org.json.JSONArray
+import org.json.JSONObject
+import java.security.Timestamp
 
 /*
 Joke of day 1
@@ -49,18 +60,47 @@ class NetworkActivity(private var context: Context) {
      *
      *   Die meisten Request über Volley sind zwar da und auskommentiert. Einige Requests sind
      *   nicht vollständig.
-     *
-     *   Die Adresse für die Request ändert sich nicht. Lediglich wird der gewünschte Abschnitt der
-     *   Variable url angehängt (urlBase + Anhägsel).
-     *   private val urlBase: String = "arbor.berrytopia.eu:8080/api/v1/"
-     *   private lateinit var url: String
-     *
-     *   private var requestQueue: RequestQueue = Volley.newRequestQueue(context)
-     *   private val requestTimeout: Int = 10000
-     *
-     *   Gson wird für die Übersetzung Json <-> Objekt
-     *   private val gson = Gson()
      */
+
+
+    /**
+    Die Adresse für die Request ändert sich nicht. Lediglich wird der gewünschte Abschnitt der
+    Variable url angehängt (urlBase + Anhägsel).
+     */
+    private val urlBase: String = "arbor.berrytopia.eu:8080/api/v1/"
+    private lateinit var url: String
+
+    /**
+     * Standard Aufruf von Volley Request: Erstmal überlegen was geliefert wird.
+     *
+     * val requestObject = JsonArrayRequest | JsonObjectRequest {
+     *      Request.METHOD.PUT,     Hier wird die Methode wie GET | PUT eingesetzt.
+     *      url,                    Selbsterklärend.
+     *      JsonObject,             Hier sollte der Body als JsonObject übergeben werden. Falls es keinen gibt, dann reicht auch null
+     *      { response ->           Die Anwort vom Server/Backend. response -> ist optional und kann Daten enthalten, falls welche übergebn werden.
+     *
+     *      },
+     *      { error ->              Die Fehlerbehandlung, falls der Request nicht funktioniert. error -> ist optional und enthält die Fehlermeldung.
+     *
+     *      }
+     * }
+     *
+     * Zusätzliche Eigenschaften manipulieren (Beispiel):
+     *
+     * resquestObject.retryPolicy = DefaultRetryPolicy(
+     *      requestTimeout,
+     *      DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+     *      DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+     * )
+     *
+     * Request immer in die RequestQueue stecken. Die Request werden je nach Reihenfolge der Request abgearbeitet.
+     */
+    private var requestQueue: RequestQueue = Volley.newRequestQueue(context)
+    private val requestTimeout: Int = 10000
+
+    //Gson wird für die Übersetzung Json <-> Objekt
+    private val gson = Gson()
+
     private val dummyUser = mutableListOf<AborUser>()
     private val geoObjects: MutableList<GeoObject> = mutableListOf()
     private val events: MutableList<Event> = mutableListOf()
@@ -74,33 +114,6 @@ class NetworkActivity(private var context: Context) {
         "Cercis siliquastrum"
     ) // Baumhasel, Gemeine Esche, Judasbaum
 
-    // Sollte die persistenten Daten aus der JSON auslesen.
-    init {
-        val user1 =
-            AborUser("Chantal", "Burkhard", "Chantal", "Burkhard", "chantal.burkhard@mail.de")
-        /*user1.id = 0
-        user1.firstName = "Chantal"
-        user1.lastName = "Burkhard"
-        user1.nickname = "Chantal"
-        user1.email = "chantal.burkhard@mail.de"*/
-        dummyUser.add(user1)
-        val user2 =
-            AborUser("Michael", "Coccejus", "Michael", "Coccejus", "michael.coccejus@mail.de")
-        /*user2.id = 1
-        user2.firstName = "Michael"
-        user2.lastName = "Coccejus"
-        user2.nickname = "Michael"
-        user2.email = "michael.coccejus@mail.de"*/
-        dummyUser.add(user2)
-        val user3 = AborUser("John", "Voronkov", "John", "Voronkov", "john.voronkov@mail.de")
-        /*user3.id = 2
-        user3.firstName = "John"
-        user3.lastName = "Voronkov"
-        user3.nickname = "John"
-        user3.email = "john.voronkov@mail.de"*/
-        dummyUser.add(user3)
-    }
-
     /**
      *  @param userName Übergebener Username vom Login-Screen
      *  @param passWord Übergebener Password vom Login-Screen
@@ -111,21 +124,15 @@ class NetworkActivity(private var context: Context) {
      */
     fun login(userName: String, passWord: String): Boolean {
         var success = false
-        val registeredUser = getUsers()
-        for (i in 0 until registeredUser.size) {
-            if (registeredUser[i].nickname == userName) {
-                if (registeredUser[i].password == passWord) {
-                    success = true
-                    loggedIn = registeredUser[i]
-                    break
-                }
-            }
-        }
+        /**
+         * Die Umsetzung des Logins muss noch an das Backend geändert werden. Am Besten sollte nur
+         * ein Boolean vom Backend zurückgeschickt werden, da der Transport von Passwörtern
+         * bekanntlich gefährlich ist.
+         */
         return success
     }
 
 
-    /*
     fun getUsers(): MutableList<AborUser> {
         val result: MutableList<AborUser> = mutableListOf()
 
@@ -149,11 +156,7 @@ class NetworkActivity(private var context: Context) {
             DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
         requestQueue.add(jsonArrayRequest)
-    }
-    */
-    fun getUsers(): MutableList<AborUser> {
-        // Rückgabe von Dummy-Usern
-        return dummyUser
+        return result
     }
 
     fun getEditor(): AborUser {
@@ -165,19 +168,18 @@ class NetworkActivity(private var context: Context) {
      *  Die Funktion Baum gibt mit einem Geo-Punkte zurück.
 
     fun getTree(id: Long): GeoObject? {
-        val trees = filteringTrees()
-        for (currentTree in trees) {
-            if (currentTree.idOfObject == id)
-                return currentTree
-        }
-        return null
+    val trees = filteringTrees()
+    for (currentTree in trees) {
+    if (currentTree.idOfObject == id)
+    return currentTree
+    }
+    return null
     }
      */
 
-    /*
+
     fun getTrees(): List<GeoObject> {
         val result: MutableList<GeoObject> = mutableListOf()
-
         url = urlBase + "objects"
         val jsonArrayRequest = JsonArrayRequest(
             Request.Method.GET,
@@ -191,7 +193,7 @@ class NetworkActivity(private var context: Context) {
                         currentTree.setTypeTree()
                         currentTree.idOfObject = currentObject.get("id") as Long
                         currentTree.position = currentObject.get("gpsPostion") as GpsPosition
-                        currentTree.relatedUser =
+                        currentTree.relatedUsers =
                             extractUserListFromJson(currentObject.getJSONArray("relatedUsers"))
                         currentTree.description = currentObject.getString("userDescription")
                         currentTree.eventList = extractEventsFromJson(
@@ -212,123 +214,123 @@ class NetworkActivity(private var context: Context) {
         )
         requestQueue.add(jsonArrayRequest)
         return result
-     }
-    */
-    fun getTrees(): List<GeoObject> {
-
-        val geoObject1 = GeoObject()
-        geoObject1.idOfObject = 0
-        geoObject1.name = "Baumbart"
-        geoObject1.latinName = "Corylus colurna"
-        geoObject1.plantDate = "12/09/2022"
-        val mediaItem = Media()
-        mediaItem.id = 0
-        mediaItem.pic = R.drawable.baum1
-        geoObject1.media = mediaItem
-        val geoObject2 = GeoObject()
-        geoObject2.idOfObject = 1
-        geoObject2.name = "Entenhausen"
-        geoObject2.latinName = "Fraxinus excelsior"
-        geoObject2.plantDate = "28/10/2021"
-        val mediaItem2 = Media()
-        mediaItem.id = 0
-        mediaItem.pic = R.drawable.baum2
-        geoObject2.media = mediaItem2
-        geoObjects.add(geoObject1)
-        geoObjects.add(geoObject2)
-        return geoObjects
     }
 
-    /*
     fun addTree(toAdd: GeoObject): Boolean {
-       https://gist.github.com/ycui1/5d25672430e6c014a9ef6b422f82652e
-       var successValue = false
-       val json = gson.toJson(toAdd) // Gson von Google kann das Object zu JSON umwandeln.
-       url = urlBase + "objects"
-       val jsonObjectRequest = JsonObjectRequest(
-           Request.Method.POST,
-           url,
-           JSONObject(json), // Anscheinend ist das der Body, der mitgegeben wird. Funktioniert mit Gson evtl genau so wie mit params Ansatz.
-           {
-               successValue = true
-               Toast.makeText(context, "Konnte abgespeichert werden.", Toast.LENGTH_SHORT)
-                   .show()
-           },
-           {
-               successValue = false
-               Toast.makeText(context, "Konnte nicht abgespeichert werden.", Toast.LENGTH_SHORT)
-                   .show()
-           }
-       )
-       jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
-           requestTimeout,
-           DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-           DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-       )
-       requestQueue.add(jsonObjectRequest)
-       return successValue
-    }
-    */
-    fun addTree(toAdd: GeoObject) {
-        toAdd.idOfObject = (geoObjects.size + 1).toLong()
-        geoObjects.add(toAdd)
-        // saveData()
+        //https://gist.github.com/ycui1/5d25672430e6c014a9ef6b422f82652e
+        var successValue = false
+        val json = gson.toJson(toAdd) // Gson von Google kann das Object zu JSON umwandeln.
+        url = urlBase + "objects"
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST,
+            url,
+            JSONObject(json), // Anscheinend ist das der Body, der mitgegeben wird. Funktioniert mit Gson evtl genau so wie mit params Ansatz.
+            {
+                successValue = true
+                Toast.makeText(context, "Konnte abgespeichert werden.", Toast.LENGTH_SHORT)
+                    .show()
+            },
+            {
+                successValue = false
+                Toast.makeText(context, "Konnte nicht abgespeichert werden.", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        )
+        jsonObjectRequest.retryPolicy = DefaultRetryPolicy(
+            requestTimeout,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        requestQueue.add(jsonObjectRequest)
+        return successValue
     }
 
-    fun getObjectMedia(): List<Media> {
+    fun getObjectMedia(getForObject: GeoObject): List<Media> {
         val result = mutableListOf<Media>()
-        for (tree in geoObjects)
-            result.add(tree.media)
+        url = urlBase +  "media"
+
+        val jsonArrayRequest = JsonArrayRequest (
+            Request.Method.GET,
+            url,
+            null,
+            {
+
+            },
+            {
+
+            }
+        )
+        requestQueue.add(jsonArrayRequest)
         return result
     }
+
 
     /**
      * @param idTree Referenz des Baumes für die DB
      *
      * Es soll eine Liste aller Events zurückgegeben werden,
      * die NUR mit dem Baum mit spezifischen ID zusammenhängen.
-     *fun getEvents(idTree: Long): List<Event> {
-
-    val result = mutableListOf<Event>()
-    url = urlBase + "events"
-    val jsonArrayRequest = JsonArrayRequest(
-    Request.Method.GET,
-    url,
-    null,
-    {
-    val currentEvent = Event()
-    result.add(currentEvent)
-    },
-    {
-    Toast.makeText(context, "Es gibt keine Events", Toast.LENGTH_SHORT).show()
-    }
-    )
-    jsonArrayRequest.retryPolicy = DefaultRetryPolicy(
-    requestTimeout,
-    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-    )
-    requestQueue.add(jsonArrayRequest)
-    return result
-    }
      */
     fun getEvents(idTree: Long): List<Event> {
         val result = mutableListOf<Event>()
-        for (currentEvent in events) {
-            if (currentEvent.idOfReference == idTree)
-                result.add(currentEvent)
-        }
+        url = urlBase + "events"
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null,
+            {
+                val currentEvent = Event()
+                if (currentEvent.idOfReference == idTree)
+                    result.add(currentEvent)
+            },
+            {
+                Toast.makeText(context, "Es gibt keine Events", Toast.LENGTH_SHORT).show()
+            }
+        )
+        jsonArrayRequest.retryPolicy = DefaultRetryPolicy(
+            requestTimeout,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        requestQueue.add(jsonArrayRequest)
         return result
     }
 
-    fun getEvents(): List<String> {
-        return listOf("Baumkrankheit", "Schädlinge", "Frostschäden", "Pilzbefall")
+    fun getEvents(): List<Event> {
+        val result = mutableListOf<Event>()
+        url = urlBase + "events"
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null,
+            { response ->
+                for (position in 0 until response.length())
+                    result.add(response[position] as Event)
+            },
+            { error ->
+                Toast.makeText(context, error.message, Toast.LENGTH_SHORT).show()
+            }
+        )
+        requestQueue.add(jsonArrayRequest)
+        return result
     }
 
-    fun addEvent(toAdd: Event) {
-        toAdd.id = (events.size + 1).toLong()
-        events.add(toAdd)
-        //saveEvents()
+    fun addEvent(toAdd: Event): Boolean {
+        var success = false
+        val json = gson.toJson(toAdd)
+        url = urlBase + "events"
+        val jsonObjectRequest = JsonObjectRequest(
+            Request.Method.POST,
+            url,
+            JSONObject(json),
+            {
+                success = true
+            },
+            {
+                success = false
+            }
+        )
+        return success
     }
 
     /**
@@ -339,106 +341,91 @@ class NetworkActivity(private var context: Context) {
      *
      * Derzeit wird wegen dem fehlendem Request eine leere Liste zurückgegeben.
      *
-     *
+     */
     fun getTasks(idTree: Long): List<Task> {
 
-    val result = mutableListOf<Task>()
-    url = urlBase + "Tasks"
-    val jsonArrayRequest = JsonArrayRequest(
-    Request.Method.GET,
-    url,
-    null,
-    { response ->
-    val currentTask = Task()
-
-    result.add(currentTask)
-    },
-    {
-    Toast.makeText(context, "Es gibt keine Aufgaben.", Toast.LENGTH_SHORT).show()
-    }
-    )
-    jsonArrayRequest.retryPolicy = DefaultRetryPolicy(
-    requestTimeout,
-    DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-    DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
-    )
-    requestQueue.add(jsonArrayRequest)
-    return result
-    }*/
-    fun getTasks(idTree: Long): List<Task> {
         val result = mutableListOf<Task>()
-        for (currentTask in tasks) {
-            for (currentTree in currentTask.relatedTrees) {
-                if (currentTree.idOfObject == idTree) {
-                    result.add(currentTask)
-                }
+        url = urlBase + "Tasks"
+        val jsonArrayRequest = JsonArrayRequest(
+            Request.Method.GET,
+            url,
+            null,
+            { response ->
+                for (position in 0 until response.length())
+                    result.add(response[position] as Task)
+            },
+            {
+                Toast.makeText(context, "Es gibt keine Aufgaben.", Toast.LENGTH_SHORT).show()
             }
-        }
-        return tasks
+        )
+        jsonArrayRequest.retryPolicy = DefaultRetryPolicy(
+            requestTimeout,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
+        )
+        requestQueue.add(jsonArrayRequest)
+        return result
     }
 
     fun addTask(toAdd: Task) {
-        toAdd.id = (tasks.size + 1).toLong()
-        tasks.add(toAdd)
-        //saveTasks()
+
     }
 
     fun getLatinNames(): Array<String> {
         return latinNames
     }
 
-/*
-Ab hier sind die Funktionen für die Umwandlung von Json in die Datenstruktur der App.
-Es werden nicht unbedingt alle Attribute verwendet, da einige Attribute über das Filtern der
-Elemente bereits gesetzt werden können (wenn man bereits Voraussetzungen bei bestimmten Typen
-von Objecten festlegen kann).
+    /*
+    Ab hier sind die Funktionen für die Umwandlung von Json in die Datenstruktur der App.
+    Es werden nicht unbedingt alle Attribute verwendet, da einige Attribute über das Filtern der
+    Elemente bereits gesetzt werden können (wenn man bereits Voraussetzungen bei bestimmten Typen
+    von Objecten festlegen kann).*/
 
-private fun extractUserFromJson(extractingFrom: JSONObject): AborUser {
-    val extractingTo = AborUser()
-    extractingTo.id = extractingFrom.get("id") as Long
-    extractingTo.firstName = extractingFrom.getString("firstName")
-    extractingTo.lastName = extractingFrom.getString("lastName")
-    extractingTo.nickname = extractingFrom.getString("nickName")
-    extractingTo.email = extractingFrom.getString("email")
-    return extractingTo
-}
-
-private fun extractUserListFromJson(extractingFrom: JSONArray): List<AborUser> {
-    val extractingTo: MutableList<AborUser> = mutableListOf()
-    for (i in 0 until extractingFrom.length()) {
-        extractingTo.add(extractUserFromJson(extractingFrom[i] as JSONObject))
+    private fun extractUserFromJson(extractingFrom: JSONObject): AborUser {
+        val extractingTo = AborUser()
+        extractingTo.id = extractingFrom.get("id") as Long
+        extractingTo.firstName = extractingFrom.getString("firstName")
+        extractingTo.lastName = extractingFrom.getString("lastName")
+        extractingTo.nickname = extractingFrom.getString("nickName")
+        extractingTo.email = extractingFrom.getString("email")
+        return extractingTo
     }
-    return extractingTo
-}
 
-private fun extractEventFromJson(
-    extractingFrom: JSONObject,
-    id: Long
-): Event {
-    val extractingTo = Event()
-    extractingTo.id = extractingFrom.getLong("id")
-    extractingTo.eventType = extractingFrom.getString("eventType")
-    extractingTo.idOfReference = id
-    extractingTo.typeOfReference = "Baum"
-    return extractingTo
-}
+    private fun extractUserListFromJson(extractingFrom: JSONArray): List<AborUser> {
+        val extractingTo: MutableList<AborUser> = mutableListOf()
+        for (i in 0 until extractingFrom.length()) {
+            extractingTo.add(extractUserFromJson(extractingFrom[i] as JSONObject))
+        }
+        return extractingTo
+    }
 
-private fun extractEventsFromJson(
-    extractingFrom: JSONArray,
-    id: Long,
-): List<Event> {
-    val extractingTo = mutableListOf<Event>()
-    for (i in 0 until extractingFrom.length()) {
-        extractingTo.add(
-            extractEventFromJson(
-                extractingFrom[i] as JSONObject,
-                id
+    private fun extractEventFromJson(
+        extractingFrom: JSONObject,
+        id: Long
+    ): Event {
+        val extractingTo = Event()
+        extractingTo.id = extractingFrom.getLong("id")
+        extractingTo.eventType = extractingFrom.getString("eventType")
+        extractingTo.idOfReference = id
+        extractingTo.typeOfReference = "Baum"
+        return extractingTo
+    }
+
+    private fun extractEventsFromJson(
+        extractingFrom: JSONArray,
+        id: Long,
+    ): List<Event> {
+        val extractingTo = mutableListOf<Event>()
+        for (i in 0 until extractingFrom.length()) {
+            extractingTo.add(
+                extractEventFromJson(
+                    extractingFrom[i] as JSONObject,
+                    id
+                )
             )
-        )
+        }
+        return extractingTo
     }
-    return extractingTo
-}
-*/
 
     fun addGps(position: GpsPosition) {
         position.id = (gpsPositions.size + 1).toLong()
