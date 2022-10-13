@@ -15,7 +15,7 @@ import androidx.recyclerview.widget.RecyclerView
 class MaintenanceAdapter(
     val context: Context,
     val mGeoObject: List<GeoObject>,
-    val treePicList: List<Media>
+    val treePicList: List<List<Media>>
 ) :
     RecyclerView.Adapter<MaintenanceAdapter.ViewHolder>() {
 
@@ -56,10 +56,7 @@ class MaintenanceAdapter(
     */
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.nameTextView.text = mGeoObject[position].name
-        if (position == 0)
-            holder.treePic.setImageResource(R.drawable.baum1)
-        if (position == 1)
-            holder.treePic.setImageResource(R.drawable.baum2)
+        holder.treePic.setImageResource(treePicList[position][0].pic)
     }
 
     // Selbsterklärend.

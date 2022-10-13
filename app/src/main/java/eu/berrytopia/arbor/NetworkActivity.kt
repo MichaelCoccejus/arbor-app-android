@@ -13,59 +13,21 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.security.Timestamp
 
-/*
-Joke of day 1
-Gefundener Kommentar unter dem Kampf zwischen Gandalf und dem Balrog in Khazad'dum (anderer
-Name für Moria).
-
-Gandalf tells the party to run so he can kill the final boss and get all the XP.
-Then he shows up next session all leveled up and with new robes and a new staff.
-
-Scumbag Gandalf.
-
------------------------------------------------------------------------------------------
-
-Joke of day 2
-Central Florida Man Buys 20mm  Electronic Gatling Gun Pulled From Navy Fighter Jet
-
-Florida man says he has no immediately plans on what he will be doing with his new acquired
-M61 Vulcan: 250-pound, 6-foot long pneumatically driven, six-barrel, air-cooled, electric
-rotary cannon which fires six thousand 20mm rounds per minute.
-
------------------------------------------------------------------------------------------
-
- Joke of day 3
-
- Once you turn 25 years and above,
- there is no need to set an alarm. Your
- problems will wake you up by force.
- */
-
 class NetworkActivity(private var context: Context) {
     /**
      *   Network-Klasse sollte die Funktionalitäten des Clients im Netz abdecken.
      *   Dazu zählen Login-Prozess, Datenabruf vom Server und Datenspeicherung zum Server.
      *
-     *   Es wird nur JsonArrayRequest abgeschickt, da der Json bei einem JsonObjectRequest eine
-     *   Json mit Json-Objekten ohne Keys zurückgibt und die Bearbeitung der Json-Objekten
-     *   erschwert. Mit JsonArrayRequest wird ein Array der Json-Objekte als response erwartet.
      *
      *   Wir bewegen uns im selben Context und wechseln nicht (Keine Mitgabe über Intent,
      *   sondern erneuter Aufruf). Der Konstruktor wird im neuen Context aufgerufen. Der Context
      *   wird für die Toast benötigt.
-     *
-     *   Wegen der Komplexizität der Struktur reicht die Zeit nicht die Objekte und Funktionen an
-     *   das Backend anzupassen. Die Request können aus dem Grund nicht getestet werden.
-     *   Insbesondere wenn der Emulator Probleme bei den Foto-Dateien erzeugt.
-     *
-     *   Die meisten Request über Volley sind zwar da und auskommentiert. Einige Requests sind
-     *   nicht vollständig.
      */
 
 
     /**
-    Die Adresse für die Request ändert sich nicht. Lediglich wird der gewünschte Abschnitt der
-    Variable url angehängt (urlBase + Anhägsel).
+     * Die Adresse für die Request ändert sich nicht. Lediglich wird der gewünschte Abschnitt der
+     * Variable url angehängt (urlBase + Anhägsel).
      */
     private val urlBase: String = "arbor.berrytopia.eu:8080/api/v1/"
     private lateinit var url: String
@@ -248,17 +210,25 @@ class NetworkActivity(private var context: Context) {
     fun getObjectMedia(getForObject: GeoObject): List<Media> {
         val result = mutableListOf<Media>()
         url = urlBase +  "media"
-
         val jsonArrayRequest = JsonArrayRequest (
             Request.Method.GET,
             url,
             null,
-            {
-
+            { response ->
+                for (position in 0 until response.length()) {
+                    val currentElement = response[position] as Media
+                    if (currentElement.idOfObject == getForObject.idOfObject)
+                        result.add(currentElement)
+                }
             },
             {
-
+                Toast.makeText(context, "Kann keine Medien für derzeitigen Baum finden.", Toast.LENGTH_SHORT).show()
             }
+        )
+        jsonArrayRequest.retryPolicy = DefaultRetryPolicy(
+            requestTimeout,
+            DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
+            DefaultRetryPolicy.DEFAULT_BACKOFF_MULT
         )
         requestQueue.add(jsonArrayRequest)
         return result

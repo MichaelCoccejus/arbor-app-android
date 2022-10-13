@@ -50,7 +50,12 @@ class MaintenanceActivity : AppCompatActivity() {
         // Beziehen der Informationen
         val net = NetworkActivity(this)
         val mGeoObject: List<GeoObject> = net.getTrees()
-        val treePicsList: List<Media> = net.getObjectMedia()
+
+        // Doppelverkette Liste =>
+        val treePicsList: MutableList<List<Media>> = mutableListOf()
+        for (currentObject in mGeoObject) {
+            treePicsList.add(net.getObjectMedia(currentObject))
+        }
 
         /**
          * Einstellungen der View
